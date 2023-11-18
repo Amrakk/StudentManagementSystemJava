@@ -1,0 +1,55 @@
+JFDML JFormDesigner: "8.2.0.0.338" Java: "17.0.8.1" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {space :p:29:p, par t {comp label1::l:::x, seq l {par l {comp labelPassword::l:p::p, comp labelEmail::l:p::p}, space s:::p, par l:::p {comp txtPassword::::311:x, comp txtEmail::::311:x}}, seq t {space :0:0:x, comp btnLogin:::p:435:p}}, space :p:34:p}}"
+			"$verticalGroup": "par l {seq l {space :p:43:p, comp label1:::p::p, space :p:39:p, par b {comp labelEmail::b:p::p, comp txtEmail::b:p::p}, space :p:50:p, par b {comp labelPassword::b:p::p, comp txtPassword::b:p::p}, space :p:41:p, comp btnLogin:::p::p, space ::42:x}}"
+		} ) {
+			name: "this"
+			"title": "Login"
+			"defaultCloseOperation": 3
+			"$sizePolicy": 1
+			"resizable": false
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "Login to SMS"
+				"font": new java.awt.Font( "Segoe UI", 1, 55 )
+				"autoscrolls": true
+				"horizontalTextPosition": 0
+				"horizontalAlignment": 0
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelEmail"
+				"text": "Email"
+				"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 0, 10, false )
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "txtEmail"
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 0, 12, false )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelPassword"
+				"text": "Password"
+				"font": #SwingDerivedFont0
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnLogin"
+				"text": "LOGIN"
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 12, false )
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnLoginMouseClicked", true ) )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnLoginEnterKeyPressed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "txtPassword"
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 0, 12, false )
+				"cursor": new java.awt.Cursor( 2 )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "txtPasswordEnterKeyPressed", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 35, 35 )
+			"size": new java.awt.Dimension( 400, 380 )
+		} )
+	}
+}
