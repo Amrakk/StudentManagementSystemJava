@@ -1,0 +1,26 @@
+JFDML JFormDesigner: "8.2.0.0.338" Java: "17.0.9" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :p:124:p, comp labelHeader:::p::p, space ::1261:x}}"
+			"$verticalGroup": "par l {seq l {space :p:57:p, comp labelHeader:::p::p, space :::x}}"
+		} ) {
+			name: "this"
+			"preferredSize": new java.awt.Dimension( 1498, 756 )
+			"minimumSize": new java.awt.Dimension( 894, 757 )
+			"background": sfield java.awt.SystemColor control
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelHeader"
+				"text": "User"
+				"background": new java.awt.Color( 153, 0, 153, 255 )
+				"foreground": new java.awt.Color( 51, 51, 51, 255 )
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 131073, 32, true )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 1195, 605 )
+		} )
+	}
+}

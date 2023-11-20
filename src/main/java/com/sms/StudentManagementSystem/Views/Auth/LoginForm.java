@@ -4,7 +4,7 @@
 
 package com.sms.StudentManagementSystem.Views.Auth;
 
-import com.sms.StudentManagementSystem.Controllers.UsersController;
+import com.sms.StudentManagementSystem.Controllers.UserController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,24 +21,19 @@ import java.awt.event.MouseEvent;
 @Component
 public class LoginForm extends JFrame {
     @Autowired
-    private UsersController usersController;
+    private UserController userController;
 
     public LoginForm() {
-        if (GraphicsEnvironment.isHeadless()) {
-            System.out.println("Headless mode");
-        } else {
-            initComponents();
-            setVisible(true);
-        }
+        if (GraphicsEnvironment.isHeadless()) System.out.println("Headless mode");
+        else initComponents();
     }
 
     private void btnLoginMouseClicked(MouseEvent e) {
         String email = txtEmail.getText();
-        char[] password = txtPassword.getPassword();
+        String password = String.valueOf(txtPassword.getPassword());
 
-        JOptionPane.showMessageDialog(this, "Email: " + email + "\nPassword: " + String.valueOf(password));
-
-        usersController.login(email, String.valueOf(password));
+        boolean isValid = userController.login(email, password, this);
+        setVisible(!isValid);
     }
 
     private void btnLoginEnterKeyPressed(KeyEvent e) {
