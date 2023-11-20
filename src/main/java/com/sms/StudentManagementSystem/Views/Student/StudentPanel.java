@@ -31,7 +31,7 @@ public class StudentPanel extends JPanel {
         labelHeader.setText("Student");
         labelHeader.setBackground(new Color(0x990099));
         labelHeader.setForeground(new Color(0x333333));
-        labelHeader.setFont(new Font("Segoe UI", Font.BOLD, 32));
+        labelHeader.setFont(new Font("Segoe UI", Font.BOLD, 36));
 
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
@@ -40,7 +40,7 @@ public class StudentPanel extends JPanel {
                 .addGroup(layout.createSequentialGroup()
                     .addGap(124, 124, 124)
                     .addComponent(labelHeader)
-                    .addContainerGap(1244, Short.MAX_VALUE))
+                    .addContainerGap(1253, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup()

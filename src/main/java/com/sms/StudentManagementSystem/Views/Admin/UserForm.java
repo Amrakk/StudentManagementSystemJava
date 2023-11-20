@@ -10,8 +10,8 @@ import java.awt.*;
 /**
  * @author hoang
  */
-public class UserPanel extends JPanel {
-    public UserPanel() {
+public class UserForm extends JPanel {
+    public UserForm() {
         initComponents();
     }
 
@@ -28,7 +28,7 @@ public class UserPanel extends JPanel {
         labelHeader.setText("User");
         labelHeader.setBackground(new Color(0x990099));
         labelHeader.setForeground(new Color(0x333333));
-        labelHeader.setFont(new Font("Segoe UI", Font.BOLD, 32));
+        labelHeader.setFont(new Font("Segoe UI", Font.BOLD, 36));
 
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
@@ -37,7 +37,7 @@ public class UserPanel extends JPanel {
                 .addGroup(layout.createSequentialGroup()
                     .addGap(124, 124, 124)
                     .addComponent(labelHeader)
-                    .addContainerGap(1261, Short.MAX_VALUE))
+                    .addContainerGap(1303, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup()
