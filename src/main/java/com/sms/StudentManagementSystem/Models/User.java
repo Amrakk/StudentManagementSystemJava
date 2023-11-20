@@ -2,6 +2,7 @@ package com.sms.StudentManagementSystem.Models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Setter
@@ -17,7 +19,6 @@ import java.sql.Date;
 @AllArgsConstructor
 @Component
 public class User {
-
     @Id
     private String email;
     private String password;
@@ -27,6 +28,9 @@ public class User {
     private String phone;
     private String status;
     private String role;
+
+    @OneToMany(mappedBy = "user")
+    private List<LoginHistory> loginHistories;
 
     @Override
     public String toString() {
