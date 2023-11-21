@@ -4,9 +4,12 @@
 
 package com.sms.StudentManagementSystem.Views;
 
+import com.sms.StudentManagementSystem.Controllers.FormController;
 import com.sms.StudentManagementSystem.Models.User;
+import com.sms.StudentManagementSystem.Views.Admin.LoginHistoryForm;
 import com.sms.StudentManagementSystem.Views.Auth.LoginForm;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -25,6 +28,9 @@ public class MainForm extends JFrame {
 
     private LoginForm loginForm;
     private CardLayout card;
+
+    @Autowired
+    private FormController formController;
 
     public MainForm() {
         if (GraphicsEnvironment.isHeadless()) System.out.println("Headless mode");
@@ -73,6 +79,12 @@ public class MainForm extends JFrame {
 
     private void btnLogoutEnterKeyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) btnLogoutMouseClicked(null);
+    }
+
+    public void openLoginHistoryForm() {
+        LoginHistoryForm loginHistoryForm = formController.getLoginHistoryForm();
+        loginHistoryForm.setVisible(true);
+        loginHistoryForm.loadTable();
     }
 
     private void initComponents() {

@@ -1,5 +1,6 @@
 package com.sms.StudentManagementSystem.Controllers;
 
+import com.sms.StudentManagementSystem.Models.LoginHistory;
 import com.sms.StudentManagementSystem.Models.User;
 import com.sms.StudentManagementSystem.Repositories.UserRepository;
 import com.sms.StudentManagementSystem.Views.Admin.UserPanel;
@@ -12,11 +13,15 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 
 import javax.swing.*;
+import java.sql.Timestamp;
 
 @Controller
 public class UserController {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private LoginHistoryController loginHistoryController;
 
     @Autowired
     private MainForm mainForm;
@@ -51,6 +56,9 @@ public class UserController {
         panelBody.add(studentPanel, "StudentPanel", 0);
         panelBody.add(profilePanel, "ProfilePanel", 1);
         panelBody.add(userPanel, "UserPanel", 2);
+
+        LoginHistory loginHistory = new LoginHistory(null, new Timestamp(System.currentTimeMillis()), user);
+        loginHistoryController.add(loginHistory);
 
         mainForm.setVisible(true);
         return true;

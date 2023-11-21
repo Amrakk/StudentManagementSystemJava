@@ -201,6 +201,7 @@ new FormModel {
 					"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 18, true )
 					"background": new java.awt.Color( 0, 102, 204, 255 )
 					"foreground": new java.awt.Color( 255, 255, 255, 255 )
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnLoginHistoryMouseClicked", true ) )
 				} )
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {

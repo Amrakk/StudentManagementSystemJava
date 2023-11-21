@@ -109,6 +109,10 @@ public class ProfilePanel extends JPanel {
         }
     }
 
+    private void btnLoginHistoryMouseClicked(MouseEvent e) {
+        mainForm.openLoginHistoryForm();
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         labelHeader = new JLabel();
@@ -443,6 +447,12 @@ public class ProfilePanel extends JPanel {
             btnLoginHistory.setFont(new Font("Segoe UI", btnLoginHistory.getFont().getStyle() | Font.BOLD, 18));
             btnLoginHistory.setBackground(new Color(0x0066cc));
             btnLoginHistory.setForeground(Color.white);
+            btnLoginHistory.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    btnLoginHistoryMouseClicked(e);
+                }
+            });
 
             GroupLayout panelAdminLayout = new GroupLayout(panelAdmin);
             panelAdmin.setLayout(panelAdminLayout);
