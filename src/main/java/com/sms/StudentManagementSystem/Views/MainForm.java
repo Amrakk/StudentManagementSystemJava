@@ -4,11 +4,9 @@
 
 package com.sms.StudentManagementSystem.Views;
 
-import com.sms.StudentManagementSystem.Controllers.UserController;
 import com.sms.StudentManagementSystem.Models.User;
 import com.sms.StudentManagementSystem.Views.Auth.LoginForm;
-import com.sms.StudentManagementSystem.Views.Student.StudentPanel;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -25,20 +23,13 @@ import java.awt.event.MouseEvent;
 public class MainForm extends JFrame {
     private User user;
 
-    @Autowired
-    private UserController userController;
-
     private LoginForm loginForm;
-    private StudentPanel studentPanel = new StudentPanel();
-    private ProfilePanel profilePanel = new ProfilePanel();
     private CardLayout card;
 
     public MainForm() {
         if (GraphicsEnvironment.isHeadless()) System.out.println("Headless mode");
         else initComponents();
 
-        panelBody.add(studentPanel, "StudentPanel");
-        panelBody.add(profilePanel, "ProfilePanel");
         card = (CardLayout) panelBody.getLayout();
         card.show(panelBody, "StudentPanel");
     }
@@ -59,6 +50,12 @@ public class MainForm extends JFrame {
 
     private void btnProfileMouseClicked(MouseEvent e) {
         card.show(panelBody, "ProfilePanel");
+        ProfilePanel profilePanel = (ProfilePanel) panelBody.getComponent(1);
+        profilePanel.panelLoad();
+    }
+
+    public void loadUserForm() {
+        card.show(panelBody, "UserPanel");
     }
 
     private void btnLogoutMouseClicked(MouseEvent e) {
@@ -226,6 +223,6 @@ public class MainForm extends JFrame {
     private JLabel labelWelcome;
     private JButton btnProfile;
     private JButton btnLogout;
-    private JPanel panelBody;
+    @Getter private JPanel panelBody;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

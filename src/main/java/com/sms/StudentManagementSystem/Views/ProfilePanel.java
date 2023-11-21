@@ -5,14 +5,21 @@
 package com.sms.StudentManagementSystem.Views;
 
 import com.sms.StudentManagementSystem.Controllers.UserController;
+import com.sms.StudentManagementSystem.Controllers.UtilsController;
 import com.sms.StudentManagementSystem.Models.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 
 /**
  * @author hoang
@@ -21,15 +28,85 @@ import java.awt.*;
 public class ProfilePanel extends JPanel {
     private User user;
 
-    @Autowired
+    private MainForm mainForm;
+
+    @Setter
     private UserController userController;
 
     public ProfilePanel() {
-        initComponents();
+        if (GraphicsEnvironment.isHeadless()) System.out.println("Headless mode");
+        else initComponents();
+    }
+
+    public void panelLoad() {
+        if (user == null) return;
+
+        if (!user.getRole().equals("Admin")) {
+            panelAdmin.setVisible(false);
+            panelAdmin.setEnabled(false);
+        }
+
+        txtName.setText(user.getName());
+        txtEmail.setText(user.getEmail());
+        txtPhone.setText(user.getPhone());
+        txtDoB.setText(user.getDob().toString());
+        txtRole.setText(user.getRole());
+        txtStatus.setText(user.getStatus());
+
+        if (!UtilsController.loadAvatar(avatarBox, user.getEmail()))
+            JOptionPane.showMessageDialog(null, "Error: Avatar is not loaded.", "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setMainForm(MainForm mainForm) {
+        this.mainForm = mainForm;
+    }
+
+    private void btnUserManagementMouseClicked(MouseEvent e) {
+        mainForm.loadUserForm();
+    }
+
+    private void btnChangePasswordMouseClicked(MouseEvent e) {
+        String newPassword = String.valueOf(txtNewPassword.getPassword());
+        String confirmPassword = String.valueOf(txtConfirmPassword.getPassword());
+
+        boolean isChanged = userController.changePassword(user.getEmail(), newPassword, confirmPassword);
+        if (isChanged) {
+            txtNewPassword.setText("");
+            txtConfirmPassword.setText("");
+        }
+    }
+
+    private void txtConfirmPasswordEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnChangePasswordMouseClicked(null);
+    }
+
+    private void txtNewPasswordEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnChangePasswordMouseClicked(null);
+    }
+
+    private void btnChangeAvatarMouseClicked(MouseEvent e) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Choose an image");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "jpeg", "png", "gif", "ico");
+        fileChooser.setFileFilter(filter);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File avatar = fileChooser.getSelectedFile();
+            if (UtilsController.saveAvatar(user.getEmail(), avatar)) {
+                JOptionPane.showMessageDialog(null, "Avatar changed successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                if (!UtilsController.loadAvatar(avatarBox, user.getEmail()))
+                    JOptionPane.showMessageDialog(null, "Error: Avatar is not loaded.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else
+                JOptionPane.showMessageDialog(null, "Error: Avatar is not changed.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void initComponents() {
@@ -49,11 +126,11 @@ public class ProfilePanel extends JPanel {
         txtStatus = new JTextField();
         labelStatus = new JLabel();
         panelSecurity = new JPanel();
-        labelPhone2 = new JLabel();
+        labelNewPassword = new JLabel();
         txtNewPassword = new JPasswordField();
         txtConfirmPassword = new JPasswordField();
-        labelPhone3 = new JLabel();
-        btnChangeAvatar2 = new JButton();
+        labelConfirmPassword = new JLabel();
+        btnChangePassword = new JButton();
         btnChangeAvatar = new JButton();
         panelAdmin = new JPanel();
         btnUserManagement = new JButton();
@@ -246,28 +323,46 @@ public class ProfilePanel extends JPanel {
             panelSecurity.setOpaque(false);
             panelSecurity.setPreferredSize(new Dimension(956, 310));
 
-            //---- labelPhone2 ----
-            labelPhone2.setText("NEW PASSWORD");
-            labelPhone2.setFont(new Font("Segoe UI", labelPhone2.getFont().getStyle() | Font.BOLD, 18));
-            labelPhone2.setForeground(new Color(0x666666));
+            //---- labelNewPassword ----
+            labelNewPassword.setText("NEW PASSWORD");
+            labelNewPassword.setFont(new Font("Segoe UI", labelNewPassword.getFont().getStyle() | Font.BOLD, 18));
+            labelNewPassword.setForeground(new Color(0x666666));
 
             //---- txtNewPassword ----
             txtNewPassword.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            txtNewPassword.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    txtNewPasswordEnterKeyPressed(e);
+                }
+            });
 
             //---- txtConfirmPassword ----
             txtConfirmPassword.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            txtConfirmPassword.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    txtConfirmPasswordEnterKeyPressed(e);
+                }
+            });
 
-            //---- labelPhone3 ----
-            labelPhone3.setText("CONFIRM PASSWORD");
-            labelPhone3.setFont(new Font("Segoe UI", labelPhone3.getFont().getStyle() | Font.BOLD, 18));
-            labelPhone3.setForeground(new Color(0x666666));
+            //---- labelConfirmPassword ----
+            labelConfirmPassword.setText("CONFIRM PASSWORD");
+            labelConfirmPassword.setFont(new Font("Segoe UI", labelConfirmPassword.getFont().getStyle() | Font.BOLD, 18));
+            labelConfirmPassword.setForeground(new Color(0x666666));
 
-            //---- btnChangeAvatar2 ----
-            btnChangeAvatar2.setText("CHANGE PASSWORD");
-            btnChangeAvatar2.setFont(new Font("Segoe UI", btnChangeAvatar2.getFont().getStyle() | Font.BOLD, 20));
-            btnChangeAvatar2.setBackground(SystemColor.control);
-            btnChangeAvatar2.setForeground(new Color(0x666666));
-            btnChangeAvatar2.setBorder(new LineBorder(new Color(0x333333), 1, true));
+            //---- btnChangePassword ----
+            btnChangePassword.setText("CHANGE PASSWORD");
+            btnChangePassword.setFont(new Font("Segoe UI", btnChangePassword.getFont().getStyle() | Font.BOLD, 20));
+            btnChangePassword.setBackground(SystemColor.control);
+            btnChangePassword.setForeground(new Color(0x666666));
+            btnChangePassword.setBorder(new LineBorder(new Color(0x333333), 1, true));
+            btnChangePassword.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    btnChangePasswordMouseClicked(e);
+                }
+            });
 
             GroupLayout panelSecurityLayout = new GroupLayout(panelSecurity);
             panelSecurity.setLayout(panelSecurityLayout);
@@ -277,18 +372,18 @@ public class ProfilePanel extends JPanel {
                         .addGroup(panelSecurityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                             .addGroup(panelSecurityLayout.createSequentialGroup()
                                 .addGap(218, 218, 218)
-                                .addComponent(labelPhone2)
+                                .addComponent(labelNewPassword)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
                                 .addComponent(txtNewPassword, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelSecurityLayout.createSequentialGroup()
                                 .addGap(0, 218, Short.MAX_VALUE)
-                                .addComponent(labelPhone3)
+                                .addComponent(labelConfirmPassword)
                                 .addGap(60, 60, 60)
                                 .addComponent(txtConfirmPassword, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)))
                         .addGap(217, 217, 217))
                     .addGroup(panelSecurityLayout.createSequentialGroup()
                         .addGap(317, 317, 317)
-                        .addComponent(btnChangeAvatar2, GroupLayout.PREFERRED_SIZE, 310, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnChangePassword, GroupLayout.PREFERRED_SIZE, 310, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
             panelSecurityLayout.setVerticalGroup(
@@ -296,14 +391,14 @@ public class ProfilePanel extends JPanel {
                     .addGroup(panelSecurityLayout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addGroup(panelSecurityLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelPhone2)
+                            .addComponent(labelNewPassword)
                             .addComponent(txtNewPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30)
                         .addGroup(panelSecurityLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelPhone3)
+                            .addComponent(labelConfirmPassword)
                             .addComponent(txtConfirmPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30)
-                        .addComponent(btnChangeAvatar2, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnChangePassword, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(10, Short.MAX_VALUE))
             );
         }
@@ -314,6 +409,12 @@ public class ProfilePanel extends JPanel {
         btnChangeAvatar.setBackground(SystemColor.control);
         btnChangeAvatar.setForeground(new Color(0x333333));
         btnChangeAvatar.setBorder(new LineBorder(new Color(0x333333), 1, true));
+        btnChangeAvatar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                btnChangeAvatarMouseClicked(e);
+            }
+        });
 
         //======== panelAdmin ========
         {
@@ -330,6 +431,12 @@ public class ProfilePanel extends JPanel {
             btnUserManagement.setMaximumSize(new Dimension(172, 38));
             btnUserManagement.setMinimumSize(new Dimension(172, 38));
             btnUserManagement.setPreferredSize(new Dimension(172, 38));
+            btnUserManagement.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    btnUserManagementMouseClicked(e);
+                }
+            });
 
             //---- btnLoginHistory ----
             btnLoginHistory.setText("Login History");
@@ -434,11 +541,11 @@ public class ProfilePanel extends JPanel {
     private JTextField txtStatus;
     private JLabel labelStatus;
     private JPanel panelSecurity;
-    private JLabel labelPhone2;
+    private JLabel labelNewPassword;
     private JPasswordField txtNewPassword;
     private JPasswordField txtConfirmPassword;
-    private JLabel labelPhone3;
-    private JButton btnChangeAvatar2;
+    private JLabel labelConfirmPassword;
+    private JButton btnChangePassword;
     private JButton btnChangeAvatar;
     private JPanel panelAdmin;
     private JButton btnUserManagement;
