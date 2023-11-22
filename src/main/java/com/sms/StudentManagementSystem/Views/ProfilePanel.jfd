@@ -4,22 +4,242 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:124:p, comp labelHeader:::p::p, space ::1270:x}}"
-			"$verticalGroup": "par l {seq l {space :p:57:p, comp labelHeader:::p::p, space :::x}}"
+			"$horizontalGroup": "par l {seq l {space :p:124:p, par l {seq {par l {comp labelHeader::l:p::p, comp panelAvatar::l:p:267:p}, space :0:0:x}, comp btnChangeAvatar::l:::x, comp panelAdmin::l:::x}, space ::52:x, par l {comp panelProfile:::::p, comp panelSecurity:::p::p}, space :p:95:p}}"
+			"$verticalGroup": "par l {seq l {space :p:57:p, comp labelHeader:::p::p, space s:::p, par l {seq {comp panelAvatar:::p:283:p, space :::p, comp btnChangeAvatar:::p:46:p, space s:::p, comp panelAdmin:::p::p}, seq {comp panelProfile:::p::p, space s:::p, comp panelSecurity:::p:280:p}}, space :117:38:x}}"
 		} ) {
 			name: "this"
 			"preferredSize": new java.awt.Dimension( 1498, 756 )
 			"minimumSize": new java.awt.Dimension( 894, 757 )
 			"background": sfield java.awt.SystemColor control
+			"foreground": new java.awt.Color( 255, 255, 255, 255 )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "labelHeader"
 				"text": "Account"
 				"background": new java.awt.Color( 153, 0, 153, 255 )
 				"foreground": new java.awt.Color( 51, 51, 51, 255 )
-				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 131073, 32, true )
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 131073, 36, true )
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+				"$horizontalGroup": "par l {seq {space :p:32:p, par t {seq t {comp labelEmail:::p::p, space :::x, comp txtEmail:::p:255:p}, seq t {comp labelName:::p::p, space :p:40:p, comp txtName:::p:255:p}, seq t {comp labelPhone:::p::p, space :::x, comp txtPhone:::p:255:p}}, space :p:136:p, par l {seq l {comp labelDoB:::p::p, space :p:90:p, comp txtDoB:::p:255:p}, seq t {par l {comp labelRole:::p::p, comp labelStatus:::p::p}, space :p:58:p, par l {comp txtStatus::t:p:255:p, comp txtRole::t:p:255:p}}}, space :p:46:p}}"
+				"$verticalGroup": "par l {seq t {space ::28:x, par l {seq l {par b {comp labelName::b:p::p, comp txtName::b:p::p}, space :p:30:p, par b {comp txtEmail::b:p::p, comp labelEmail::b:p::p}, space :p:30:p, par b {comp txtPhone::b:p::p, comp labelPhone::b:p::p}}, seq l {par b {comp labelDoB::b:p::p, comp txtDoB::b:p::p}, space :p:30:p, par b {comp txtRole::b:p::p, comp labelRole::b:p::p}, space :p:30:p, par b {comp txtStatus::b:p::p, comp labelStatus::b:p::p}}}, space :p:28:p}}"
+			} ) {
+				name: "panelProfile"
+				"border": new javax.swing.border.TitledBorder( new javax.swing.border.LineBorder( new java.awt.Color( 153, 153, 153, 255 ), 2, true ), "Profile", 4, 0, &Font0 new java.awt.Font( "Segoe UI", 1, 28 ), new java.awt.Color( 153, 153, 153, 255 ) )
+				"foreground": &Color0 new java.awt.Color( 51, 51, 51, 255 )
+				"opaque": false
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelName"
+					"text": "NAME"
+					"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 18, true )
+					"foreground": &Color1 new java.awt.Color( 102, 102, 102, 255 )
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "txtName"
+					"font": &SwingDerivedFont1 new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 196608, 18, true )
+					"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+					"enabled": false
+					"text": "Nguyen Hoang Duy"
+					"foreground": &Color2 new java.awt.Color( 102, 102, 102, 255 )
+					"opaque": false
+					"disabledTextColor": &Color3 new java.awt.Color( 102, 102, 102, 255 )
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "txtDoB"
+					"font": #SwingDerivedFont1
+					"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+					"enabled": false
+					"text": "12/08/2003"
+					"foreground": #Color2
+					"opaque": false
+					"disabledTextColor": #Color3
+					"cursor": &Cursor0 new java.awt.Cursor( 2 )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelDoB"
+					"text": "DoB"
+					"font": #SwingDerivedFont0
+					"foreground": #Color1
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "txtEmail"
+					"font": #SwingDerivedFont1
+					"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+					"enabled": false
+					"text": "admin@gmail.com"
+					"foreground": #Color2
+					"opaque": false
+					"disabledTextColor": #Color3
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelEmail"
+					"text": "EMAIL"
+					"font": #SwingDerivedFont0
+					"foreground": #Color1
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "txtPhone"
+					"font": #SwingDerivedFont1
+					"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+					"enabled": false
+					"text": "0902529803"
+					"foreground": #Color2
+					"opaque": false
+					"disabledTextColor": #Color3
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelPhone"
+					"text": "PHONE"
+					"font": #SwingDerivedFont0
+					"foreground": #Color1
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelRole"
+					"text": "ROLE"
+					"font": #SwingDerivedFont0
+					"foreground": #Color1
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "txtRole"
+					"font": #SwingDerivedFont1
+					"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+					"enabled": false
+					"text": "Admin"
+					"foreground": #Color2
+					"opaque": false
+					"disabledTextColor": #Color3
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "txtStatus"
+					"font": #SwingDerivedFont1
+					"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+					"enabled": false
+					"text": "Normal"
+					"foreground": #Color2
+					"opaque": false
+					"disabledTextColor": #Color3
+					"cursor": #Cursor0
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelStatus"
+					"text": "STATUS"
+					"font": #SwingDerivedFont0
+					"foreground": #Color1
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+				"$horizontalGroup": "par l {seq t {par t {seq {space :p:218:p, comp labelNewPassword:::p::p, space ::101:x, comp txtNewPassword:::p:260:p}, seq t {space :0:218:x, comp labelConfirmPassword:::p::p, space :p:60:p, comp txtConfirmPassword:::p:260:p}}, space :p:217:p}, seq l {space :p:317:p, comp btnChangePassword:::p:310:p, space :::x}}"
+				"$verticalGroup": "par l {seq l {space :p:24:p, par b {comp labelNewPassword::b:p::p, comp txtNewPassword::b:p::p}, space :p:30:p, par b {comp labelConfirmPassword::b:p::p, comp txtConfirmPassword::b:p::p}, space :p:30:p, comp btnChangePassword:::p:40:p, space ::10:x}}"
+			} ) {
+				name: "panelSecurity"
+				"border": new javax.swing.border.TitledBorder( new javax.swing.border.LineBorder( new java.awt.Color( 153, 153, 153, 255 ), 2, true ), "Security", 4, 0, #Font0, new java.awt.Color( 153, 153, 153, 255 ) )
+				"foreground": #Color0
+				"opaque": false
+				"preferredSize": new java.awt.Dimension( 956, 310 )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelNewPassword"
+					"text": "NEW PASSWORD"
+					"font": #SwingDerivedFont0
+					"foreground": #Color1
+				} )
+				add( new FormComponent( "javax.swing.JPasswordField" ) {
+					name: "txtNewPassword"
+					"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 196608, 18, true )
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "txtNewPasswordEnterKeyPressed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JPasswordField" ) {
+					name: "txtConfirmPassword"
+					"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 196608, 18, true )
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "txtConfirmPasswordEnterKeyPressed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelConfirmPassword"
+					"text": "CONFIRM PASSWORD"
+					"font": #SwingDerivedFont0
+					"foreground": #Color1
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "btnChangePassword"
+					"text": "CHANGE PASSWORD"
+					"font": &SwingDerivedFont2 new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 20, true )
+					"background": sfield java.awt.SystemColor control
+					"foreground": new java.awt.Color( 102, 102, 102, 255 )
+					"border": &LineBorder0 new javax.swing.border.LineBorder( new java.awt.Color( 51, 51, 51, 255 ), 1, true )
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnChangePasswordMouseClicked", true ) )
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnChangePasswordEnterKeyPressed", true ) )
+				} )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnChangeAvatar"
+				"text": "CHANGE AVATAR"
+				"font": #SwingDerivedFont2
+				"background": sfield java.awt.SystemColor control
+				"foreground": new java.awt.Color( 51, 51, 51, 255 )
+				"border": #LineBorder0
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnChangeAvatarMouseClicked", true ) )
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+				"$horizontalGroup": "par l {seq t {par t {comp btnLoginHistory:::p:255:p, comp btnUserManagement:::p:255:p}, space :0:0:p}}"
+				"$verticalGroup": "par l {seq {space :::p, comp btnUserManagement:::p:46:p, space u:::p, comp btnLoginHistory::::47:x, space :::p}}"
+			} ) {
+				name: "panelAdmin"
+				"border": new javax.swing.border.TitledBorder( &LineBorder1 new javax.swing.border.LineBorder( new java.awt.Color( 153, 153, 153, 255 ), 2, true ), "Admin", 4, 0, #Font0, &Color4 new java.awt.Color( 153, 153, 153, 255 ) )
+				"foreground": &Color5 new java.awt.Color( 153, 153, 153, 255 )
+				"opaque": false
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "btnUserManagement"
+					"text": "User Management"
+					"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 18, true )
+					"background": new java.awt.Color( 0, 102, 204, 255 )
+					"foreground": new java.awt.Color( 255, 255, 255, 255 )
+					"maximumSize": new java.awt.Dimension( 172, 38 )
+					"minimumSize": new java.awt.Dimension( 172, 38 )
+					"preferredSize": new java.awt.Dimension( 172, 38 )
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnUserManagementMouseClicked", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "btnLoginHistory"
+					"text": "Login History"
+					"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 18, true )
+					"background": new java.awt.Color( 0, 102, 204, 255 )
+					"foreground": new java.awt.Color( 255, 255, 255, 255 )
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnLoginHistoryMouseClicked", true ) )
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "panelAvatar"
+				"border": new javax.swing.border.TitledBorder( #LineBorder1, "Avatar", 4, 0, #Font0, #Color4 )
+				"foreground": #Color5
+				"opaque": false
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "avatarBox"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/Images/defaultAvatar.png" )
+					"horizontalAlignment": 0
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
+					name: "hSpacer1"
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "North"
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
+					name: "hSpacer2"
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "South"
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+					name: "vSpacer1"
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "East"
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+					name: "vSpacer2"
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "West"
+				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 26, 15 )
+			"location": new java.awt.Point( 6, 6 )
 			"size": new java.awt.Dimension( 1195, 605 )
 		} )
 	}

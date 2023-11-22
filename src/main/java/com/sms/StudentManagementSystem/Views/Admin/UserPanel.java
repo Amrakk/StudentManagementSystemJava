@@ -1,8 +1,10 @@
 /*
- * Created by JFormDesigner on Mon Nov 20 20:58:48 ICT 2023
+ * Created by JFormDesigner on Tue Nov 21 14:41:36 ICT 2023
  */
 
 package com.sms.StudentManagementSystem.Views.Admin;
+
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +12,7 @@ import java.awt.*;
 /**
  * @author hoang
  */
+@Component
 public class UserPanel extends JPanel {
     public UserPanel() {
         initComponents();
@@ -28,7 +31,7 @@ public class UserPanel extends JPanel {
         labelHeader.setText("User");
         labelHeader.setBackground(new Color(0x990099));
         labelHeader.setForeground(new Color(0x333333));
-        labelHeader.setFont(new Font("Segoe UI", Font.BOLD, 32));
+        labelHeader.setFont(new Font("Segoe UI", Font.BOLD, 36));
 
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
@@ -37,14 +40,14 @@ public class UserPanel extends JPanel {
                 .addGroup(layout.createSequentialGroup()
                     .addGap(124, 124, 124)
                     .addComponent(labelHeader)
-                    .addContainerGap(1261, Short.MAX_VALUE))
+                    .addContainerGap(1237, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup()
                 .addGroup(layout.createSequentialGroup()
                     .addGap(57, 57, 57)
                     .addComponent(labelHeader)
-                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addContainerGap(651, Short.MAX_VALUE))
         );
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }

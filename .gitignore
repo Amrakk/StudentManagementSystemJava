@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### User Files ###
+# Ignore everything in the Resources folder
+Resources/*
+
+# Except the admin@gmail.com folder
+!Resources/admin@gmail.com/

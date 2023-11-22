@@ -2,8 +2,10 @@ package com.sms.StudentManagementSystem;
 
 import com.sms.StudentManagementSystem.Controllers.DepartmentController;
 import com.sms.StudentManagementSystem.Controllers.MajorController;
+import com.sms.StudentManagementSystem.Controllers.UserController;
 import com.sms.StudentManagementSystem.Models.Department;
 import com.sms.StudentManagementSystem.Models.Major;
+import com.sms.StudentManagementSystem.Models.User;
 import com.sms.StudentManagementSystem.Views.Auth.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -12,8 +14,14 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 @SpringBootApplication
 public class App {
+    @Autowired
+    private UserController userController;
+
     @Autowired
     private DepartmentController departmentController;
 
@@ -36,6 +44,11 @@ public class App {
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
+
+            LocalDate dob = LocalDate.of(2003, 8, 12);
+            User admin = new User("admin@gmail.com", "admin123", "Duy Nguyen", 20, Date.valueOf(dob), "0902529803", "Normal", "Admin", null);
+            if (userController.getUserByEmail("admin@gmail.com") == null)
+                userController.add(admin);
 
             Department enee = new Department("E&EE", "Electrical and Electronic Engineering", 2, null, null);
             Department fnb = new Department("F&B", "Food and Beverage", 3, null, null);
