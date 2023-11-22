@@ -165,6 +165,7 @@ new FormModel {
 					"foreground": new java.awt.Color( 102, 102, 102, 255 )
 					"border": &LineBorder0 new javax.swing.border.LineBorder( new java.awt.Color( 51, 51, 51, 255 ), 1, true )
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnChangePasswordMouseClicked", true ) )
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnChangePasswordEnterKeyPressed", true ) )
 				} )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {

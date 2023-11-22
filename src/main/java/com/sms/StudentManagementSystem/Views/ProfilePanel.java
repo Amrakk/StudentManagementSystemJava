@@ -113,6 +113,10 @@ public class ProfilePanel extends JPanel {
         mainForm.openLoginHistoryForm();
     }
 
+    private void btnChangePasswordEnterKeyPressed(KeyEvent e) {
+        btnChangePasswordMouseClicked(null);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         labelHeader = new JLabel();
@@ -365,6 +369,12 @@ public class ProfilePanel extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     btnChangePasswordMouseClicked(e);
+                }
+            });
+            btnChangePassword.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    btnChangePasswordEnterKeyPressed(e);
                 }
             });
 

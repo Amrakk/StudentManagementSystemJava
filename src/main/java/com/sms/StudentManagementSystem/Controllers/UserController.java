@@ -165,4 +165,13 @@ public class UserController {
         return false;
     }
 
+    public void deleteByEmail(String email) {
+        try {
+            userRepository.deleteByEmail(email);
+            JOptionPane.showMessageDialog(null, "User deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }
