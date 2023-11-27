@@ -10,6 +10,14 @@ public class DepartmentController {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+    public Iterable<Department> findAll() {
+        return departmentRepository.findAll();
+    }
+
+    public int count() {
+        return (int) departmentRepository.count();
+    }
+
     public void add(Department department) {
         departmentRepository.save(department);
     }

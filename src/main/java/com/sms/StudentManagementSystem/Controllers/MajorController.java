@@ -10,6 +10,14 @@ public class MajorController {
     @Autowired
     private MajorRepository majorRepository;
 
+    public Iterable<Major> getAll() {
+        return majorRepository.findAll();
+    }
+
+    public int count() {
+        return (int) majorRepository.count();
+    }
+
     public void add(Major major) {
         majorRepository.save(major);
     }

@@ -39,47 +39,27 @@ public class App {
     public CommandLineRunner setup() {
         return args -> {
             try {
-                majorController.deleteAll();
-                departmentController.deleteAll();
+                if (majorController.count() != 0 && departmentController.count() != 0) {
+                    departmentController.add(new Department("E&EE", "Electrical and Electronic Engineering", 2, null, null));
+                    departmentController.add(new Department("F&B", "Food and Beverage", 3, null, null));
+                    departmentController.add(new Department("IT", "Information Technology", 5, null, null));
+
+                    majorController.add(new Major("MKT", "Marketing", departmentController.findById("F&B"), null));
+                    majorController.add(new Major("CS", "Computer Science", departmentController.findById("IT"), null));
+                    majorController.add(new Major("NE", "Network Engineering", departmentController.findById("IT"), null));
+                    majorController.add(new Major("SE", "Software Engineering", departmentController.findById("IT"), null));
+                }
+
+                if (userController.getUserByEmail("admin@gmail.com") == null) {
+                    LocalDate dob = LocalDate.of(2003, 8, 12);
+                    User admin = new User("admin@gmail.com", "admin123", "Duy Nguyen", 20, Date.valueOf(dob), "0902529803", "Normal", "Admin", null);
+                    userController.add(admin);
+                }
+
+                System.out.println("Database is ready.");
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
-
-            LocalDate dob = LocalDate.of(2003, 8, 12);
-            User admin = new User("admin@gmail.com", "admin123", "Duy Nguyen", 20, Date.valueOf(dob), "0902529803", "Normal", "Admin", null);
-            if (userController.getUserByEmail("admin@gmail.com") == null)
-                userController.add(admin);
-
-            Department enee = new Department("E&EE", "Electrical and Electronic Engineering", 2, null, null);
-            Department fnb = new Department("F&B", "Food and Beverage", 3, null, null);
-            Department it = new Department("IT", "Information Technology", 5, null, null);
-            if (departmentController.findById(enee.getId()) == null)
-                departmentController.add(enee);
-
-            if (departmentController.findById(fnb.getId()) == null)
-                departmentController.add(fnb);
-
-            if (departmentController.findById(it.getId()) == null)
-                departmentController.add(it);
-
-            Major mkt = new Major("MKT", "Marketing", fnb, null);
-            Major cs = new Major("CS", "Computer Science", it, null);
-            Major ne = new Major("NE", "Network Engineering", it, null);
-            Major se = new Major("SE", "Software Engineering", it, null);
-
-            if (majorController.findById(mkt.getId()) == null)
-                majorController.add(mkt);
-
-            if (majorController.findById(cs.getId()) == null)
-                majorController.add(cs);
-
-            if (majorController.findById(ne.getId()) == null)
-                majorController.add(ne);
-
-            if (majorController.findById(se.getId()) == null)
-                majorController.add(se);
-
-            System.out.println("Setup");
         };
     }
 
