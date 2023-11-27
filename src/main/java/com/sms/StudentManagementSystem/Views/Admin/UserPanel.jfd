@@ -4,8 +4,8 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:124:p, comp labelHeader:::p::p, space ::1237:x}}"
-			"$verticalGroup": "par l {seq l {space :p:57:p, comp labelHeader:::p::p, space ::651:x}}"
+			"$horizontalGroup": "par l {seq l {space :p:124:p, par t:::p {comp scrollPane1:::p:1255:p, seq {par l {seq {comp txtSearch:::p:350:p, space :0:0:p, comp btnSearch:::p:105:p, space :0:0:p, comp btnFilter:::p::p, space :0:0:x}, seq {comp labelHeader:::p::p, space :::x, comp btnExport:::p:115:p}}, space :p:12:p, comp btnImport:::p:115:p, space u:::p, comp btnCreate:::p:115:p}}, space ::115:x}}"
+			"$verticalGroup": "par l {seq l {space :p:57:p, par l {seq {par b {comp btnCreate::b:p:48:p, comp btnImport::b:p:48:p, comp btnExport::b:p:48:p}, space :0:0:x}, seq {comp labelHeader:::p::p, space ::17:x, par b {comp txtSearch::b:p::p, comp btnSearch::b:::x, comp btnFilter::b:p::p}}}, comp scrollPane1:::p:540:p, space :p:54:p}}"
 		} ) {
 			name: "this"
 			"preferredSize": new java.awt.Dimension( 1498, 756 )
@@ -18,8 +18,132 @@ new FormModel {
 				"foreground": new java.awt.Color( 51, 51, 51, 255 )
 				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 131073, 36, true )
 			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 0, 18, true )
+				"foreground": new java.awt.Color( 0, 0, 0, 255 )
+				add( new FormComponent( "javax.swing.JTable" ) {
+					name: "tblUser"
+					"foreground": new java.awt.Color( 51, 51, 51, 255 )
+					"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 0, 16, true )
+					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+					}, new java.util.Vector {
+						add( "Email" )
+						add( "Name" )
+						add( "Date of Birth" )
+						add( "Phone" )
+						add( "Status" )
+						add( "Role" )
+					}, new java.util.Vector {
+						add( class java.lang.String )
+						add( class java.lang.String )
+						add( class java.util.Date )
+						add( class java.lang.String )
+						add( class java.lang.String )
+						add( class java.lang.String )
+					}, new java.util.Vector {
+						add( false )
+						add( false )
+						add( false )
+						add( false )
+						add( false )
+						add( false )
+					}, new java.util.Vector {
+						add( new com.jformdesigner.model.SwingTableColumn( null, 315, 315, 315, false ) )
+						add( new com.jformdesigner.model.SwingTableColumn( null, 300, 300, 300, false ) )
+						add( new com.jformdesigner.model.SwingTableColumn( null, 180, 180, 180, false ) )
+						add( new com.jformdesigner.model.SwingTableColumn( null, 175, 175, 175, false ) )
+						add( new com.jformdesigner.model.SwingTableColumn( null, 145, 145, 145, false ) )
+						add( new com.jformdesigner.model.SwingTableColumn( null, 140, 140, 140, false ) )
+					} )
+					"fillsViewportHeight": true
+					"rowHeight": 34
+				} )
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "txtSearch"
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 196608, 18, true )
+				"minimumSize": new java.awt.Dimension( 60, 40 )
+				"preferredSize": new java.awt.Dimension( 60, 40 )
+				"foreground": new java.awt.Color( 51, 51, 51, 255 )
+				"text": "Searh by Name"
+				"border": new javax.swing.border.LineBorder( new java.awt.Color( 51, 51, 51, 255 ), 1, false )
+				"opaque": false
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnSearch"
+				"text": "FIND"
+				"maximumSize": new java.awt.Dimension( 110, 40 )
+				"minimumSize": new java.awt.Dimension( 110, 40 )
+				"preferredSize": new java.awt.Dimension( 110, 40 )
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 16, true )
+				"foreground": new java.awt.Color( 102, 102, 102, 255 )
+				"border": new javax.swing.border.LineBorder( new java.awt.Color( 102, 102, 102, 255 ), 1, false )
+				"opaque": false
+				"background": sfield java.awt.SystemColor control
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnFilter"
+				"text": "FILTER"
+				"minimumSize": new java.awt.Dimension( 110, 40 )
+				"maximumSize": new java.awt.Dimension( 110, 40 )
+				"preferredSize": new java.awt.Dimension( 110, 40 )
+				"border": new javax.swing.border.LineBorder( new java.awt.Color( 102, 102, 102, 255 ), 1, false )
+				"opaque": false
+				"foreground": new java.awt.Color( 102, 102, 102, 255 )
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 16, true )
+				"background": sfield java.awt.SystemColor control
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnImport"
+				"text": "IMPORT"
+				"preferredSize": &Dimension0 new java.awt.Dimension( 118, 38 )
+				"maximumSize": &Dimension1 new java.awt.Dimension( 118, 38 )
+				"minimumSize": &Dimension2 new java.awt.Dimension( 118, 38 )
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 16, true )
+				"border": new javax.swing.border.LineBorder( new java.awt.Color( 102, 102, 102, 255 ), 1, true )
+				"opaque": false
+				"foreground": new java.awt.Color( 102, 102, 102, 255 )
+				"background": sfield java.awt.SystemColor control
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnExport"
+				"text": "EXPORT"
+				"border": new javax.swing.border.LineBorder( new java.awt.Color( 102, 102, 102, 255 ), 1, true )
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 16, true )
+				"foreground": new java.awt.Color( 102, 102, 102, 255 )
+				"opaque": false
+				"background": sfield java.awt.SystemColor control
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnCreate"
+				"text": "CREATE"
+				"preferredSize": #Dimension0
+				"maximumSize": #Dimension1
+				"minimumSize": #Dimension2
+				"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+				"background": new java.awt.Color( 0, 102, 204, 255 )
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 16, true )
+				"foreground": new java.awt.Color( 255, 255, 255, 255 )
+			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 50, 50 )
+			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 1195, 605 )
 		} )
 	}

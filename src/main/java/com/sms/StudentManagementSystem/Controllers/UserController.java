@@ -45,6 +45,11 @@ public class UserController {
             return false;
         }
 
+        if (user.getRole().equals("Admin")) {
+            userPanel.setUserController(this);
+            userPanel.loadTable();
+        }
+
         profilePanel.setUserController(this);
         profilePanel.setMainForm(mainForm);
         profilePanel.setUser(user);
@@ -62,6 +67,10 @@ public class UserController {
 
         mainForm.setVisible(true);
         return true;
+    }
+
+    public Iterable<User> getAll() {
+        return userRepository.findAll();
     }
 
     public User getUserByEmail(String email) {
