@@ -7,6 +7,7 @@ package com.sms.StudentManagementSystem.Views;
 import com.sms.StudentManagementSystem.Controllers.FormController;
 import com.sms.StudentManagementSystem.Models.User;
 import com.sms.StudentManagementSystem.Views.Admin.LoginHistoryForm;
+import com.sms.StudentManagementSystem.Views.Admin.UserDetailForm;
 import com.sms.StudentManagementSystem.Views.Auth.LoginForm;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,12 @@ public class MainForm extends JFrame {
         LoginHistoryForm loginHistoryForm = formController.getLoginHistoryForm();
         loginHistoryForm.setVisible(true);
         loginHistoryForm.loadTable();
+    }
+
+    public void openUserDetailForm(User user) {
+        UserDetailForm userDetailForm = formController.getUserDetailForm();
+        userDetailForm.setUser(user);
+        userDetailForm.setVisible(true);
     }
 
     private void initComponents() {

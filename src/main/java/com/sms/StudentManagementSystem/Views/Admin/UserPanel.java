@@ -6,6 +6,7 @@ package com.sms.StudentManagementSystem.Views.Admin;
 
 import com.sms.StudentManagementSystem.Controllers.UserController;
 import com.sms.StudentManagementSystem.Models.User;
+import com.sms.StudentManagementSystem.Views.MainForm;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 
 /**
@@ -26,6 +29,9 @@ public class UserPanel extends JPanel {
     @Setter
     private UserController userController;
 
+    @Setter
+    private MainForm mainForm;
+
     public UserPanel() {
         if (GraphicsEnvironment.isHeadless()) System.out.println("Headless mode");
         else initComponents();
@@ -37,6 +43,19 @@ public class UserPanel extends JPanel {
         model.setRowCount(0);
         for (User user : users)
             model.addRow(new Object[]{user.getEmail(), user.getName(), user.getDob(), user.getPhone(), user.getStatus(), user.getRole()});
+    }
+
+    // Add event mouse leaved for this
+    private void tblUserMouseDoubleClicked(MouseEvent e) {
+        int row = tblUser.getSelectedRow();
+        if (e.getClickCount() == 2 && row >= 0) {
+            String email = tblUser.getValueAt(row, 0).toString();
+            User user = userController.getUserByEmail(email);
+            if (user != null) {
+                JOptionPane.showMessageDialog(this, user.toString(), "User Information", JOptionPane.INFORMATION_MESSAGE);
+                mainForm.openUserDetailForm(user);
+            }
+        }
     }
 
     private void initComponents() {
@@ -123,6 +142,12 @@ public class UserPanel extends JPanel {
             }
             tblUser.setFillsViewportHeight(true);
             tblUser.setRowHeight(34);
+            tblUser.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    tblUserMouseDoubleClicked(e);
+                }
+            });
             scrollPane1.setViewportView(tblUser);
         }
 

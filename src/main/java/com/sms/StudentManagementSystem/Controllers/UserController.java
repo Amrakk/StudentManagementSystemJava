@@ -47,6 +47,7 @@ public class UserController {
 
         if (user.getRole().equals("Admin")) {
             userPanel.setUserController(this);
+            userPanel.setMainForm(mainForm);
             userPanel.loadTable();
         }
 

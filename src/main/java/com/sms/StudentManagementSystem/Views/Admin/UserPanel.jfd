@@ -74,6 +74,7 @@ new FormModel {
 					} )
 					"fillsViewportHeight": true
 					"rowHeight": 34
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseReleased", "tblUserMouseDoubleClicked", true ) )
 				} )
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
