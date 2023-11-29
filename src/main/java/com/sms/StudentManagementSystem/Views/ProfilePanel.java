@@ -67,14 +67,19 @@ public class ProfilePanel extends JPanel {
 
     private void btnUserManagementMouseClicked(MouseEvent e) {
         mainForm.loadUserForm();
+        mainForm.userPanelLoadTable();
     }
 
     private void btnChangePasswordMouseClicked(MouseEvent e) {
         String newPassword = String.valueOf(txtNewPassword.getPassword());
         String confirmPassword = String.valueOf(txtConfirmPassword.getPassword());
 
-        boolean isChanged = userController.changePassword(user.getEmail(), newPassword, confirmPassword);
-        if (isChanged) {
+        if (!newPassword.equals(confirmPassword)) {
+            JOptionPane.showMessageDialog(null, "Confirm password is not matched", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (userController.changePassword(user.getEmail(), newPassword)) {
             txtNewPassword.setText("");
             txtConfirmPassword.setText("");
         }

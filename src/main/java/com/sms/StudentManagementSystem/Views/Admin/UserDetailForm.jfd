@@ -5,13 +5,13 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 			"$horizontalGroup": "par l {seq l {space :p:38:p, comp panelProfile:::p::p, space :p:30:p, par t {comp labelFormStatus:::p::p, comp panelSecurity:::p:340:p}, space ::33:x}}"
-			"$verticalGroup": "par l {seq l {space :p:26:p, par l:::p {comp panelProfile:::p::p, seq t {comp panelSecurity:::p:383:p, space :::x, comp labelFormStatus:::p::p}}, space ::28:x}}"
+			"$verticalGroup": "par l {seq l {space :p:26:p, par l:::p {comp panelProfile:::p::p, seq t {comp panelSecurity:::p:383:p, space :::x, comp labelFormStatus:::p::p}}, space ::27:x}}"
 		} ) {
 			name: "this"
 			"title": "User Details"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq {space :p:32:p, par l {comp labelPhone::l:p::p, comp labelStatus::l:p::p, comp labelRole::l:p::p, comp labelEmail::l:p::p, comp labelName::l:p::p, comp labelDoB::l:p::p}, space ::26:x, par l:::p {comp txtName::::255:x, comp txtEmail::::255:x, comp cbRole::::255:x, comp cbStatus::t::255:x, comp txtPhone::t::255:x, comp dcDoB::t::255:x}, space :p:57:p, par l {comp panelAvatar:::p:267:p, comp btnChangeAvatar:::p:267:p, seq l {comp btnReset:::::x, space u:::p, comp btnSave:::p:127:p}}, space :27:27:p}}"
-				"$verticalGroup": "par l {seq l {space :p:35:p, par l {seq l {par b {comp labelName::b:p::p, comp txtName::b:p:42:p}, space :p:35:p, par b {comp labelEmail::b:p::p, comp txtEmail::b:p:42:p}, space :p:35:p, par b {comp labelPhone::b:p::p, comp txtPhone::b:p:42:p}, space :p:35:p, par b {comp dcDoB::b:p:42:p, comp labelDoB::b:p::p}, space :p:35:p, par b {comp labelRole::b:p::p, comp cbRole::b:p:42:p}, space :p:35:p, par b {comp labelStatus::b:p::p, comp cbStatus::b:p:42:p}, space ::37:x}, seq l {comp panelAvatar:::p:283:p, space :6:6:p, comp btnChangeAvatar:::p:46:p, space ::54:x, par b {comp btnSave::b:p:46:p, comp btnReset::b:p:46:p}, space :p:29:p}}}}"
+				"$horizontalGroup": "par l {seq {space :p:32:p, par l {comp labelPhone::l:p::p, comp labelStatus::l:p::p, comp labelRole::l:p::p, comp labelEmail::l:p::p, comp labelName::l:p::p, comp labelDoB::l:p::p}, space ::26:x, par l:::p {comp txtName::::255:x, comp txtEmail::::255:x, comp cbRole::::255:x, comp cbStatus::t::255:x, comp txtPhone::t::255:x, comp dcDoB::t::255:x}, space :p:57:p, par l {comp panelAvatar:::p:267:p, comp btnResetAvatar:::p:267:p, seq l {comp btnReset:::::x, space u:::p, comp btnSave:::p:127:p}}, space :27:27:p}}"
+				"$verticalGroup": "par l {seq l {space :p:35:p, par l {seq l {par b {comp labelName::b:p::p, comp txtName::b:p:42:p}, space :p:35:p, par b {comp labelEmail::b:p::p, comp txtEmail::b:p:42:p}, space :p:35:p, par b {comp labelPhone::b:p::p, comp txtPhone::b:p:42:p}, space :p:35:p, par b {comp dcDoB::b:p:42:p, comp labelDoB::b:p::p}, space :p:35:p, par b {comp labelRole::b:p::p, comp cbRole::b:p:42:p}, space :p:35:p, par b {comp labelStatus::b:p::p, comp cbStatus::b:p:42:p}, space ::38:x}, seq l {comp panelAvatar:::p:283:p, space :6:6:p, comp btnResetAvatar:::p:46:p, space ::55:x, par b {comp btnSave::b:p:46:p, comp btnReset::b:p:46:p}, space :p:29:p}}}}"
 			} ) {
 				name: "panelProfile"
 				"border": new javax.swing.border.TitledBorder( new javax.swing.border.LineBorder( new java.awt.Color( 153, 153, 153, 255 ), 2, true ), "Profile", 4, 0, &Font0 new java.awt.Font( "Segoe UI", 1, 28 ), new java.awt.Color( 153, 153, 153, 255 ) )
@@ -121,13 +121,13 @@ new FormModel {
 					} )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "btnChangeAvatar"
-					"text": "CHANGE AVATAR"
+					name: "btnResetAvatar"
+					"text": "RESET AVATAR"
 					"font": &SwingDerivedFont2 new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 20, true )
 					"background": sfield java.awt.SystemColor control
 					"foreground": &Color3 new java.awt.Color( 51, 51, 51, 255 )
 					"border": &LineBorder0 new javax.swing.border.LineBorder( new java.awt.Color( 51, 51, 51, 255 ), 1, true )
-					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnChangeAvatarMouseClicked", true ) )
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnResetAvatarMouseClicked", true ) )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "btnSave"
@@ -138,6 +138,7 @@ new FormModel {
 					"maximumSize": new java.awt.Dimension( 172, 38 )
 					"minimumSize": new java.awt.Dimension( 172, 38 )
 					"preferredSize": new java.awt.Dimension( 172, 38 )
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnSaveMouseClicked", true ) )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "btnReset"
@@ -146,6 +147,7 @@ new FormModel {
 					"background": sfield java.awt.SystemColor control
 					"foreground": #Color3
 					"border": #LineBorder0
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnResetMouseClicked", true ) )
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "cbRole"
@@ -164,7 +166,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "cbStatus"
-					"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 0, 18, true )
+					"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 196608, 18, true )
 					"border": #LineBorder1
 					"model": new javax.swing.DefaultComboBoxModel {
 						selectedItem: "Normal"
@@ -233,8 +235,7 @@ new FormModel {
 					"background": sfield java.awt.Color red
 					"foreground": sfield java.awt.Color white
 					"border": new javax.swing.border.LineBorder( new java.awt.Color( 255, 0, 0, 255 ), 1, true )
-					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnChangePasswordMouseClicked", true ) )
-					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnChangePasswordEnterKeyPressed", true ) )
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnDeleteMouseClicked", true ) )
 				} )
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -242,6 +243,7 @@ new FormModel {
 				"text": "... Editing"
 				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 7, false )
 				"foreground": new java.awt.Color( 0, 102, 204, 255 )
+				"horizontalAlignment": 4
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 20, 26 )

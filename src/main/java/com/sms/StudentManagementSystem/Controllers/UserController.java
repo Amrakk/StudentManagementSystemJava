@@ -9,7 +9,6 @@ import com.sms.StudentManagementSystem.Views.MainForm;
 import com.sms.StudentManagementSystem.Views.ProfilePanel;
 import com.sms.StudentManagementSystem.Views.Student.StudentPanel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 
 import javax.swing.*;
@@ -35,7 +34,7 @@ public class UserController {
     public boolean login(String email, String password, LoginForm loginForm) {
         User user = getUserByEmail(email);
 
-        if (user == null || !BCrypt.checkpw(password, user.getPassword())) {
+        if (user == null || !UtilsController.checkPassword(password, user.getPassword())) {
             JOptionPane.showMessageDialog(null, "Invalid credentials", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -56,6 +55,7 @@ public class UserController {
         profilePanel.setUser(user);
 
         mainForm.setUser(user);
+        mainForm.setUserController(this);
         mainForm.setLoginForm(loginForm);
 
         JPanel panelBody = mainForm.getPanelBody();
@@ -79,13 +79,18 @@ public class UserController {
     }
 
     public boolean add(User user) {
-        if (isInvalidUser(user)) return false;
+        if (isInvalidUser(user) || isInvalidPassword(user.getPassword())) return false;
 
+        if (getUserByEmail(user.getEmail()) != null) {
+            JOptionPane.showMessageDialog(null, "Email already exists", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
         user.setPassword(UtilsController.hashPassword(user.getPassword()));
 
         try {
             userRepository.save(user);
-            JOptionPane.showMessageDialog(null, "User added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            UtilsController.saveAvatar(user.getEmail(), null);
+            JOptionPane.showMessageDialog(null, "User added successfully!\nThe account password will be: " + user.getPhone(), "Success", JOptionPane.INFORMATION_MESSAGE);
             return true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -106,25 +111,13 @@ public class UserController {
         }
     }
 
-    public boolean changePassword(String email, String newPassword, String confirmPassword) {
+    public boolean changePassword(String email, String newPassword) {
         User user = getUserByEmail(email);
+
+        if (isInvalidPassword(newPassword)) return false;
+
         if (user == null) {
             JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (newPassword.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (!UtilsController.PASSWORD_PATTERN.matcher(newPassword).matches()) {
-            JOptionPane.showMessageDialog(null, "Password must be at least 8 characters including (a-z), (A-Z), (0-9)", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (!newPassword.equals(confirmPassword)) {
-            JOptionPane.showMessageDialog(null, "New password and confirm password must be the same", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -153,7 +146,7 @@ public class UserController {
                 user.getRole().isEmpty() ||
                 user.getStatus().isEmpty() ||
                 user.getDob() == null ||
-                user.getAge() <= 0) {
+                user.getAge() < 0) {
             JOptionPane.showMessageDialog(null, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
             return true;
         }
@@ -163,25 +156,48 @@ public class UserController {
             return true;
         }
 
-        if (!UtilsController.PASSWORD_PATTERN.matcher(user.getPassword()).matches()) {
-            JOptionPane.showMessageDialog(null, "Password must be at least 8 characters including (a-z), (A-Z), (0-9)", "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+
+    private boolean isInvalidPassword(String password) {
+        if (password.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
             return true;
         }
 
-        if (getUserByEmail(user.getEmail()) != null) {
-            JOptionPane.showMessageDialog(null, "Email already exists", "Error", JOptionPane.ERROR_MESSAGE);
+        if (!UtilsController.PASSWORD_PATTERN.matcher(password).matches()) {
+            JOptionPane.showMessageDialog(null, "Password must be at least 8 characters including (a-z), (A-Z), (0-9)", "Error", JOptionPane.ERROR_MESSAGE);
             return true;
         }
         return false;
     }
 
-    public void deleteByEmail(String email) {
+    public boolean delete(User user) {
         try {
-            userRepository.deleteByEmail(email);
+            if (!loginHistoryController.deleteByUser(user.getEmail())) {
+                JOptionPane.showMessageDialog(null, "Error: Cannot delete login history", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            userRepository.delete(user);
+            commit();
+            loginHistoryController.commit();
+
+            if (!UtilsController.removeUserFolder(user.getEmail())) {
+                JOptionPane.showMessageDialog(null, "Error: Cannot delete user folder", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
             JOptionPane.showMessageDialog(null, "User deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            return true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
+    }
+
+    public void commit() {
+        userRepository.flush();
     }
 
 }

@@ -5,7 +5,9 @@
 package com.sms.StudentManagementSystem.Views.Admin;
 
 import com.sms.StudentManagementSystem.Controllers.UserController;
+import com.sms.StudentManagementSystem.Controllers.UtilsController;
 import com.sms.StudentManagementSystem.Models.User;
+import com.sms.StudentManagementSystem.Views.MainForm;
 import com.toedter.calendar.JDateChooser;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -30,6 +32,9 @@ public class UserDetailForm extends JFrame {
     private User user;
 
     @Setter
+    private MainForm mainForm;
+
+    @Setter
     private UserController userController;
 
     public UserDetailForm() {
@@ -46,33 +51,122 @@ public class UserDetailForm extends JFrame {
     }
 
     public void loadForm() {
+        btnResetMouseClicked(null);
         if (user == null) {
             // adding new user
+            labelFormStatus.setText("... Adding");
+            btnSave.setText("ADD");
+            txtEmail.setEditable(true);
+            panelSecurity.setVisible(false);
+            btnResetAvatar.setVisible(false);
         } else {
             // editing user
-//            txtName.setText(user.getName());
-//            txtEmail.setText(user.getEmail());
-//            txtRole.setText(user.getRole());
-//            txtStatus.setText(user.getStatus());
-//            txtCreatedAt.setText(user.get().toString());
-//            txtUpdatedAt.setText(user.getUpdatedAt().toString());
+            labelFormStatus.setText("... Editing");
+            btnSave.setText("EDIT");
+            txtEmail.setEditable(false);
+            panelSecurity.setVisible(true);
+            btnResetAvatar.setVisible(true);
+            if (!UtilsController.loadAvatar(avatarBox, user.getEmail()))
+                JOptionPane.showMessageDialog(null, "Error: Avatar is not loaded.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void btnChangeAvatarMouseClicked(MouseEvent e) {
-        // TODO add your code here
-    }
-
     private void btnChangePasswordMouseClicked(MouseEvent e) {
-        // TODO add your code here
+        String newPassword = String.valueOf(txtNewPassword.getPassword());
+        if (userController.changePassword(user.getEmail(), newPassword))
+            txtNewPassword.setText("");
     }
 
     private void txtNewPasswordEnterKeyPressed(KeyEvent e) {
-        btnChangePasswordMouseClicked(null);
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnChangePasswordMouseClicked(null);
     }
 
     private void btnChangePasswordEnterKeyPressed(KeyEvent e) {
         btnChangePasswordMouseClicked(null);
+    }
+
+    private void btnResetMouseClicked(MouseEvent e) {
+        if (user == null) {
+            // adding new user
+            txtName.setText("");
+            txtEmail.setText("");
+            txtPhone.setText("");
+            cbRole.setSelectedIndex(0);
+            cbStatus.setSelectedIndex(0);
+            dcDoB.setDate(Date.from(Instant.now()));
+        } else {
+            // editing user
+            txtName.setText(user.getName());
+            txtEmail.setText(user.getEmail());
+            txtPhone.setText(user.getPhone());
+            for (int i = 0; i < cbRole.getItemCount(); i++) {
+                if (cbRole.getItemAt(i).equals(user.getRole())) {
+                    cbRole.setSelectedIndex(i);
+                    break;
+                }
+            }
+            for (int i = 0; i < cbStatus.getItemCount(); i++) {
+                if (cbStatus.getItemAt(i).equals(user.getStatus())) {
+                    cbStatus.setSelectedIndex(i);
+                    break;
+                }
+            }
+
+            dcDoB.setDate(user.getDob());
+        }
+    }
+
+    private void btnResetAvatarMouseClicked(MouseEvent e) {
+        if (UtilsController.saveAvatar(user.getEmail(), null)) {
+            JOptionPane.showMessageDialog(null, "Avatar reset successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            if (!UtilsController.loadAvatar(avatarBox, user.getEmail()))
+                JOptionPane.showMessageDialog(null, "Error: Avatar is not loaded.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else
+            JOptionPane.showMessageDialog(null, "Error: Avatar is not changed.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void btnDeleteMouseClicked(MouseEvent e) {
+        if (userController.delete(user)) {
+            mainForm.userPanelLoadTable();
+            dispose();
+        }
+    }
+
+    private void btnSaveMouseClicked(MouseEvent e) {
+        String name = txtName.getText();
+        String email = txtEmail.getText();
+        String phone = txtPhone.getText();
+        Object role = cbRole.getSelectedItem();
+        Object status = cbStatus.getSelectedItem();
+        Date dob = dcDoB.getDate();
+        int age = UtilsController.calculateAge(dob);
+
+        if (role == null) role = "";
+        if (status == null) status = "";
+
+        if (user == null) {
+            // adding new user
+            user = new User(email, phone, name, age, dob, phone, status.toString(), role.toString(), null);
+            if (userController.add(user)) {
+                mainForm.userPanelLoadTable();
+                dispose();
+            }
+            user = null;
+        } else {
+            // editing user
+            user.setName(name);
+            user.setAge(age);
+            user.setDob(dob);
+            user.setPhone(phone);
+            user.setStatus(status.toString());
+            user.setRole(role.toString());
+
+            if (userController.update(user)) {
+                mainForm.userPanelLoadTable();
+                mainForm.loadHeader();
+            }
+        }
     }
 
     private void initComponents() {
@@ -93,7 +187,7 @@ public class UserDetailForm extends JFrame {
         hSpacer2 = new JPanel(null);
         vSpacer1 = new JPanel(null);
         vSpacer2 = new JPanel(null);
-        btnChangeAvatar = new JButton();
+        btnResetAvatar = new JButton();
         btnSave = new JButton();
         btnReset = new JButton();
         cbRole = new JComboBox<>();
@@ -198,16 +292,16 @@ public class UserDetailForm extends JFrame {
                 panelAvatar.add(vSpacer2, BorderLayout.WEST);
             }
 
-            //---- btnChangeAvatar ----
-            btnChangeAvatar.setText("CHANGE AVATAR");
-            btnChangeAvatar.setFont(new Font("Segoe UI", btnChangeAvatar.getFont().getStyle() | Font.BOLD, 20));
-            btnChangeAvatar.setBackground(SystemColor.control);
-            btnChangeAvatar.setForeground(new Color(0x333333));
-            btnChangeAvatar.setBorder(new LineBorder(new Color(0x333333), 1, true));
-            btnChangeAvatar.addMouseListener(new MouseAdapter() {
+            //---- btnResetAvatar ----
+            btnResetAvatar.setText("RESET AVATAR");
+            btnResetAvatar.setFont(new Font("Segoe UI", btnResetAvatar.getFont().getStyle() | Font.BOLD, 20));
+            btnResetAvatar.setBackground(SystemColor.control);
+            btnResetAvatar.setForeground(new Color(0x333333));
+            btnResetAvatar.setBorder(new LineBorder(new Color(0x333333), 1, true));
+            btnResetAvatar.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    btnChangeAvatarMouseClicked(e);
+                    btnResetAvatarMouseClicked(e);
                 }
             });
 
@@ -219,6 +313,12 @@ public class UserDetailForm extends JFrame {
             btnSave.setMaximumSize(new Dimension(172, 38));
             btnSave.setMinimumSize(new Dimension(172, 38));
             btnSave.setPreferredSize(new Dimension(172, 38));
+            btnSave.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    btnSaveMouseClicked(e);
+                }
+            });
 
             //---- btnReset ----
             btnReset.setText("RESET");
@@ -226,6 +326,12 @@ public class UserDetailForm extends JFrame {
             btnReset.setBackground(SystemColor.control);
             btnReset.setForeground(new Color(0x333333));
             btnReset.setBorder(new LineBorder(new Color(0x333333), 1, true));
+            btnReset.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    btnResetMouseClicked(e);
+                }
+            });
 
             //---- cbRole ----
             cbRole.setFont(new Font("Segoe UI", Font.PLAIN, 18));
@@ -241,7 +347,7 @@ public class UserDetailForm extends JFrame {
             cbRole.setOpaque(false);
 
             //---- cbStatus ----
-            cbStatus.setFont(new Font("Segoe UI", cbStatus.getFont().getStyle(), 18));
+            cbStatus.setFont(new Font("Segoe UI", Font.PLAIN, 18));
             cbStatus.setBorder(new LineBorder(new Color(0x666666), 1, true));
             cbStatus.setModel(new DefaultComboBoxModel<>(new String[] {
                 "Normal",
@@ -276,7 +382,7 @@ public class UserDetailForm extends JFrame {
                         .addGap(57, 57, 57)
                         .addGroup(panelProfileLayout.createParallelGroup()
                             .addComponent(panelAvatar, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnChangeAvatar, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnResetAvatar, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)
                             .addGroup(panelProfileLayout.createSequentialGroup()
                                 .addComponent(btnReset, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
@@ -312,12 +418,12 @@ public class UserDetailForm extends JFrame {
                                 .addGroup(panelProfileLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                     .addComponent(labelStatus)
                                     .addComponent(cbStatus, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(37, Short.MAX_VALUE))
+                                .addContainerGap(38, Short.MAX_VALUE))
                             .addGroup(panelProfileLayout.createSequentialGroup()
                                 .addComponent(panelAvatar, GroupLayout.PREFERRED_SIZE, 283, GroupLayout.PREFERRED_SIZE)
                                 .addGap(6, 6, 6)
-                                .addComponent(btnChangeAvatar, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                                .addComponent(btnResetAvatar, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                                 .addGroup(panelProfileLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                     .addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
@@ -389,13 +495,7 @@ public class UserDetailForm extends JFrame {
             btnDelete.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    btnChangePasswordMouseClicked(e);
-                }
-            });
-            btnDelete.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyPressed(KeyEvent e) {
-                    btnChangePasswordEnterKeyPressed(e);
+                    btnDeleteMouseClicked(e);
                 }
             });
 
@@ -437,6 +537,7 @@ public class UserDetailForm extends JFrame {
         labelFormStatus.setText("... Editing");
         labelFormStatus.setFont(new Font("Segoe UI", labelFormStatus.getFont().getStyle() | Font.BOLD, labelFormStatus.getFont().getSize() + 7));
         labelFormStatus.setForeground(new Color(0x0066cc));
+        labelFormStatus.setHorizontalAlignment(SwingConstants.RIGHT);
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
@@ -461,7 +562,7 @@ public class UserDetailForm extends JFrame {
                             .addComponent(panelSecurity, GroupLayout.PREFERRED_SIZE, 383, GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(labelFormStatus)))
-                    .addContainerGap(28, Short.MAX_VALUE))
+                    .addContainerGap(27, Short.MAX_VALUE))
         );
         pack();
         setLocationRelativeTo(getOwner());
@@ -485,7 +586,7 @@ public class UserDetailForm extends JFrame {
     private JPanel hSpacer2;
     private JPanel vSpacer1;
     private JPanel vSpacer2;
-    private JButton btnChangeAvatar;
+    private JButton btnResetAvatar;
     private JButton btnSave;
     private JButton btnReset;
     private JComboBox<String> cbRole;

@@ -5,11 +5,14 @@
 package com.sms.StudentManagementSystem.Views;
 
 import com.sms.StudentManagementSystem.Controllers.FormController;
+import com.sms.StudentManagementSystem.Controllers.UserController;
 import com.sms.StudentManagementSystem.Models.User;
 import com.sms.StudentManagementSystem.Views.Admin.LoginHistoryForm;
 import com.sms.StudentManagementSystem.Views.Admin.UserDetailForm;
+import com.sms.StudentManagementSystem.Views.Admin.UserPanel;
 import com.sms.StudentManagementSystem.Views.Auth.LoginForm;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +35,9 @@ public class MainForm extends JFrame {
 
     @Autowired
     private FormController formController;
+
+    @Setter
+    private UserController userController;
 
     public MainForm() {
         if (GraphicsEnvironment.isHeadless()) System.out.println("Headless mode");
@@ -91,7 +97,21 @@ public class MainForm extends JFrame {
     public void openUserDetailForm(User user) {
         UserDetailForm userDetailForm = formController.getUserDetailForm();
         userDetailForm.setUser(user);
+        userDetailForm.setMainForm(this);
+        userDetailForm.setUserController(userController);
+        userDetailForm.loadForm();
         userDetailForm.setVisible(true);
+    }
+
+    public void userPanelLoadTable() {
+        UserPanel userPanel = (UserPanel) panelBody.getComponent(2);
+        userPanel.loadTable();
+    }
+
+    public void loadHeader() {
+        User user = userController.getUserByEmail(this.user.getEmail());
+        this.user = user;
+        btnProfile.setText(user.getName());
     }
 
     private void initComponents() {
