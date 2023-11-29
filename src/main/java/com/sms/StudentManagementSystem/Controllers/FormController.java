@@ -16,8 +16,6 @@ public class FormController {
     private UserDetailForm userDetailForm;
 
 //    @Autowired
-//    private UserController userController;
-//    @Autowired
 //    private CertificateController certificateController;
 //    @Autowired
 //    private StudentController studentController;

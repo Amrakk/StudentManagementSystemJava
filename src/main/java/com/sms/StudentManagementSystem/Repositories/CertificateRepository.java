@@ -1,9 +1,9 @@
 package com.sms.StudentManagementSystem.Repositories;
 
 import com.sms.StudentManagementSystem.Models.Certificate;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CertificateRepository extends CrudRepository<Certificate, String> {
+public interface CertificateRepository extends JpaRepository<Certificate, String> {
 }

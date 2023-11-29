@@ -4,7 +4,6 @@
 
 package com.sms.StudentManagementSystem.Views.Admin;
 
-import javax.swing.table.*;
 import com.sms.StudentManagementSystem.Controllers.LoginHistoryController;
 import com.sms.StudentManagementSystem.Models.LoginHistory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 
 /**
@@ -26,12 +26,12 @@ public class LoginHistoryForm extends JFrame {
     @Autowired
     public LoginHistoryForm(LoginHistoryController loginHistoryController) {
         this.loginHistoryController = loginHistoryController;
-        loginHistories = loginHistoryController.getAll();
         if (GraphicsEnvironment.isHeadless()) System.out.println("Headless mode");
         else initComponents();
     }
 
     public void loadTable() {
+        loginHistories = loginHistoryController.getAll();
         DefaultTableModel model = (DefaultTableModel) tableMain.getModel();
         model.setRowCount(0);
         for (LoginHistory loginHistory : loginHistories)

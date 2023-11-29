@@ -15,6 +15,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -45,17 +47,29 @@ public class UserPanel extends JPanel {
             model.addRow(new Object[]{user.getEmail(), user.getName(), user.getDob(), user.getPhone(), user.getStatus(), user.getRole()});
     }
 
-    // Add event mouse leaved for this
+    // Add event mouse released for this
     private void tblUserMouseDoubleClicked(MouseEvent e) {
         int row = tblUser.getSelectedRow();
         if (e.getClickCount() == 2 && row >= 0) {
             String email = tblUser.getValueAt(row, 0).toString();
             User user = userController.getUserByEmail(email);
-            if (user != null) {
-                JOptionPane.showMessageDialog(this, user.toString(), "User Information", JOptionPane.INFORMATION_MESSAGE);
+            if (user != null)
                 mainForm.openUserDetailForm(user);
-            }
         }
+    }
+
+    private void btnCreateMouseClicked(MouseEvent e) {
+        mainForm.openUserDetailForm(null);
+    }
+
+    private void txtSearchFocusGained(FocusEvent e) {
+        if (txtSearch.getText().equals("Search by Name"))
+            txtSearch.setText("");
+    }
+
+    private void txtSearchFocusLost(FocusEvent e) {
+        if (txtSearch.getText().isEmpty())
+            txtSearch.setText("Search by Name");
     }
 
     private void initComponents() {
@@ -156,9 +170,19 @@ public class UserPanel extends JPanel {
         txtSearch.setMinimumSize(new Dimension(60, 40));
         txtSearch.setPreferredSize(new Dimension(60, 40));
         txtSearch.setForeground(new Color(0x333333));
-        txtSearch.setText("Searh by Name");
+        txtSearch.setText("Search by Name");
         txtSearch.setBorder(new LineBorder(new Color(0x333333)));
         txtSearch.setOpaque(false);
+        txtSearch.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                txtSearchFocusGained(e);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                txtSearchFocusLost(e);
+            }
+        });
 
         //---- btnSearch ----
         btnSearch.setText("FIND");
@@ -210,6 +234,12 @@ public class UserPanel extends JPanel {
         btnCreate.setBackground(new Color(0x0066cc));
         btnCreate.setFont(new Font("Segoe UI", btnCreate.getFont().getStyle() | Font.BOLD, 16));
         btnCreate.setForeground(Color.white);
+        btnCreate.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                btnCreateMouseClicked(e);
+            }
+        });
 
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);

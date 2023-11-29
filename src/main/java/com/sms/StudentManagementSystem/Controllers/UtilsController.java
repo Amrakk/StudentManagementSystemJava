@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 @Controller
@@ -54,6 +55,9 @@ public class UtilsController {
             }
         }
 
+        if (avatar == null)
+            avatar = new File(DEFAULT_AVATAR_PATH);
+
         String fileUploadedExtension = avatar.getName().substring(avatar.getName().lastIndexOf(".") + 1);
         String avatarPath = Paths.get(folderPath, "avatar." + fileUploadedExtension).toString();
 
@@ -89,5 +93,39 @@ public class UtilsController {
 
     public static String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt(10));
+    }
+
+    public static boolean checkPassword(String password, String hashedPassword) {
+        return BCrypt.checkpw(password, hashedPassword);
+    }
+
+    public static boolean removeUserFolder(String email) {
+        String userPath = Paths.get(RESOURCES, email).toString();
+        String folderPath = Paths.get(WORKING_DIR, userPath).toString();
+
+        File folder = new File(folderPath);
+        if (folder.exists()) {
+            File[] matchingFiles = folder.listFiles();
+            if (matchingFiles != null) {
+                for (File file : matchingFiles) {
+                    if (!file.delete()) {
+                        System.out.println("Error: Cannot delete file.");
+                        return false;
+                    }
+                }
+            }
+            if (!folder.delete()) {
+                System.out.println("Error: Cannot delete folder.");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static int calculateAge(Date date) {
+        Date currentDate = new Date();
+        long diffInMillis = Math.abs(currentDate.getTime() - date.getTime());
+        long diff = diffInMillis / (24 * 60 * 60 * 1000);
+        return (int) (diff / 365.25);
     }
 }
