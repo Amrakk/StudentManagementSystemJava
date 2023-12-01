@@ -77,15 +77,6 @@ public class UserDetailForm extends JFrame {
             txtNewPassword.setText("");
     }
 
-    private void txtNewPasswordEnterKeyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER)
-            btnChangePasswordMouseClicked(null);
-    }
-
-    private void btnChangePasswordEnterKeyPressed(KeyEvent e) {
-        btnChangePasswordMouseClicked(null);
-    }
-
     private void btnResetMouseClicked(MouseEvent e) {
         if (user == null) {
             // adding new user
@@ -127,7 +118,11 @@ public class UserDetailForm extends JFrame {
     }
 
     private void btnDeleteMouseClicked(MouseEvent e) {
+        int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this account?", "Warning", JOptionPane.YES_NO_OPTION);
+        if (result != JOptionPane.YES_OPTION) return;
+
         if (userController.delete(user)) {
+            userController.commit();
             mainForm.userPanelLoadTable();
             dispose();
         }
@@ -149,6 +144,7 @@ public class UserDetailForm extends JFrame {
             // adding new user
             user = new User(email, phone, name, age, dob, phone, status.toString(), role.toString(), null);
             if (userController.add(user)) {
+                JOptionPane.showMessageDialog(null, "User added successfully!\nThe account password will be: " + user.getPhone(), "Success", JOptionPane.INFORMATION_MESSAGE);
                 mainForm.userPanelLoadTable();
                 dispose();
             }
@@ -167,6 +163,36 @@ public class UserDetailForm extends JFrame {
                 mainForm.loadHeader();
             }
         }
+    }
+
+    private void btnResetAvatarEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnResetAvatarMouseClicked(null);
+    }
+
+    private void txtNewPasswordEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnChangePasswordMouseClicked(null);
+    }
+
+    private void btnChangePasswordEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnChangePasswordMouseClicked(null);
+    }
+
+    private void btnResetEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnResetMouseClicked(null);
+    }
+
+    private void btnDeleteEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnDeleteMouseClicked(null);
+    }
+
+    private void btnSaveKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnSaveMouseClicked(null);
     }
 
     private void initComponents() {
@@ -304,6 +330,12 @@ public class UserDetailForm extends JFrame {
                     btnResetAvatarMouseClicked(e);
                 }
             });
+            btnResetAvatar.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    btnResetAvatarEnterKeyPressed(e);
+                }
+            });
 
             //---- btnSave ----
             btnSave.setText("SAVE");
@@ -319,6 +351,12 @@ public class UserDetailForm extends JFrame {
                     btnSaveMouseClicked(e);
                 }
             });
+            btnSave.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    btnSaveKeyPressed(e);
+                }
+            });
 
             //---- btnReset ----
             btnReset.setText("RESET");
@@ -330,6 +368,12 @@ public class UserDetailForm extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     btnResetMouseClicked(e);
+                }
+            });
+            btnReset.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    btnResetEnterKeyPressed(e);
                 }
             });
 
@@ -496,6 +540,12 @@ public class UserDetailForm extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     btnDeleteMouseClicked(e);
+                }
+            });
+            btnDelete.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    btnDeleteEnterKeyPressed(e);
                 }
             });
 

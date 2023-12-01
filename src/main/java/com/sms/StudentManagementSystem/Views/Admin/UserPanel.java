@@ -12,13 +12,11 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.Date;
 
 /**
@@ -37,10 +35,19 @@ public class UserPanel extends JPanel {
     public UserPanel() {
         if (GraphicsEnvironment.isHeadless()) System.out.println("Headless mode");
         else initComponents();
+
     }
 
     public void loadTable() {
         users = userController.getAll();
+        DefaultTableModel model = (DefaultTableModel) tblUser.getModel();
+        model.setRowCount(0);
+        for (User user : users)
+            model.addRow(new Object[]{user.getEmail(), user.getName(), user.getDob(), user.getPhone(), user.getStatus(), user.getRole()});
+    }
+
+    public void loadTable(String text) {
+        users = userController.searchByName(text);
         DefaultTableModel model = (DefaultTableModel) tblUser.getModel();
         model.setRowCount(0);
         for (User user : users)
@@ -62,6 +69,11 @@ public class UserPanel extends JPanel {
         mainForm.openUserDetailForm(null);
     }
 
+    private void btnCreateEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnCreateMouseClicked(null);
+    }
+
     private void txtSearchFocusGained(FocusEvent e) {
         if (txtSearch.getText().equals("Search by Name"))
             txtSearch.setText("");
@@ -72,6 +84,69 @@ public class UserPanel extends JPanel {
             txtSearch.setText("Search by Name");
     }
 
+    private void btnSearchMouseClicked(MouseEvent e) {
+        if (txtSearch.getText().equals("Search by Name")) loadTable();
+        else loadTable(txtSearch.getText());
+    }
+
+    private void txtSearchEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnSearchMouseClicked(null);
+    }
+
+    private void btnSearchEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnSearchMouseClicked(null);
+    }
+
+    private void btnExportMouseClicked(MouseEvent e) {
+        // export to excel or csv
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel/CSV file", "xlsx", "csv");
+        fileChooser.setFileFilter(filter);
+        fileChooser.setDialogTitle("Specify a file to save");
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            String path = fileChooser.getSelectedFile().getAbsolutePath();
+            if (userController.exportFile(path))
+                JOptionPane.showMessageDialog(null, "Export successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(null, "Export failed", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void btnExportEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnExportMouseClicked(null);
+    }
+
+    private void btnImportMouseClicked(MouseEvent e) {
+        // import from excel or csv
+        int result = JOptionPane.showConfirmDialog(null, "This will remove all user, login history data! Please be certain!", "Warning", JOptionPane.YES_NO_CANCEL_OPTION);
+        if (result != JOptionPane.YES_OPTION) return;
+
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel/CSV file", "xlsx", "csv");
+        fileChooser.setFileFilter(filter);
+        fileChooser.setDialogTitle("Specify a file to import");
+        int userSelection = fileChooser.showOpenDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            String path = fileChooser.getSelectedFile().getAbsolutePath();
+            if (userController.importFile(path)) {
+                JOptionPane.showMessageDialog(null, "Users imported successfully!\n\nUser new password will be their phone number", "Success", JOptionPane.INFORMATION_MESSAGE);
+                loadTable();
+            } else
+                JOptionPane.showMessageDialog(null, "Import failed", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void btnImportEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnImportMouseClicked(null);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         labelHeader = new JLabel();
@@ -79,7 +154,6 @@ public class UserPanel extends JPanel {
         tblUser = new JTable();
         txtSearch = new JTextField();
         btnSearch = new JButton();
-        btnFilter = new JButton();
         btnImport = new JButton();
         btnExport = new JButton();
         btnCreate = new JButton();
@@ -183,6 +257,12 @@ public class UserPanel extends JPanel {
                 txtSearchFocusLost(e);
             }
         });
+        txtSearch.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                txtSearchEnterKeyPressed(e);
+            }
+        });
 
         //---- btnSearch ----
         btnSearch.setText("FIND");
@@ -194,17 +274,18 @@ public class UserPanel extends JPanel {
         btnSearch.setBorder(new LineBorder(new Color(0x666666)));
         btnSearch.setOpaque(false);
         btnSearch.setBackground(SystemColor.control);
-
-        //---- btnFilter ----
-        btnFilter.setText("FILTER");
-        btnFilter.setMinimumSize(new Dimension(110, 40));
-        btnFilter.setMaximumSize(new Dimension(110, 40));
-        btnFilter.setPreferredSize(new Dimension(110, 40));
-        btnFilter.setBorder(new LineBorder(new Color(0x666666)));
-        btnFilter.setOpaque(false);
-        btnFilter.setForeground(new Color(0x666666));
-        btnFilter.setFont(new Font("Segoe UI", btnFilter.getFont().getStyle() | Font.BOLD, 16));
-        btnFilter.setBackground(SystemColor.control);
+        btnSearch.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                btnSearchMouseClicked(e);
+            }
+        });
+        btnSearch.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                btnSearchEnterKeyPressed(e);
+            }
+        });
 
         //---- btnImport ----
         btnImport.setText("IMPORT");
@@ -216,6 +297,18 @@ public class UserPanel extends JPanel {
         btnImport.setOpaque(false);
         btnImport.setForeground(new Color(0x666666));
         btnImport.setBackground(SystemColor.control);
+        btnImport.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                btnImportMouseClicked(e);
+            }
+        });
+        btnImport.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                btnImportEnterKeyPressed(e);
+            }
+        });
 
         //---- btnExport ----
         btnExport.setText("EXPORT");
@@ -224,6 +317,18 @@ public class UserPanel extends JPanel {
         btnExport.setForeground(new Color(0x666666));
         btnExport.setOpaque(false);
         btnExport.setBackground(SystemColor.control);
+        btnExport.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                btnExportMouseClicked(e);
+            }
+        });
+        btnExport.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                btnExportEnterKeyPressed(e);
+            }
+        });
 
         //---- btnCreate ----
         btnCreate.setText("CREATE");
@@ -238,6 +343,12 @@ public class UserPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 btnCreateMouseClicked(e);
+            }
+        });
+        btnCreate.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                btnCreateEnterKeyPressed(e);
             }
         });
 
@@ -255,8 +366,6 @@ public class UserPanel extends JPanel {
                                     .addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
                                     .addGap(0, 0, 0)
                                     .addComponent(btnSearch, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
-                                    .addGap(0, 0, 0)
-                                    .addComponent(btnFilter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                     .addGap(0, 0, Short.MAX_VALUE))
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(labelHeader)
@@ -284,8 +393,7 @@ public class UserPanel extends JPanel {
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                             .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnSearch, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnFilter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(btnSearch, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 540, GroupLayout.PREFERRED_SIZE)
                     .addGap(54, 54, 54))
         );
@@ -298,7 +406,6 @@ public class UserPanel extends JPanel {
     private JTable tblUser;
     private JTextField txtSearch;
     private JButton btnSearch;
-    private JButton btnFilter;
     private JButton btnImport;
     private JButton btnExport;
     private JButton btnCreate;

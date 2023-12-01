@@ -14,6 +14,10 @@ public class DepartmentController {
         return departmentRepository.findAll();
     }
 
+    public Department getByName(String name) {
+        return departmentRepository.findByName(name);
+    }
+
     public int count() {
         return (int) departmentRepository.count();
     }
@@ -26,11 +30,4 @@ public class DepartmentController {
         return departmentRepository.findById(id).orElse(null);
     }
 
-    public void deleteAll() {
-        departmentRepository.deleteAll();
-    }
-
-    public void delete(Department department) {
-        departmentRepository.delete(department);
-    }
 }

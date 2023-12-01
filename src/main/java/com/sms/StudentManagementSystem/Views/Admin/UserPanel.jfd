@@ -4,8 +4,8 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:124:p, par t:::p {comp scrollPane1:::p:1255:p, seq {par l {seq {comp txtSearch:::p:350:p, space :0:0:p, comp btnSearch:::p:105:p, space :0:0:p, comp btnFilter:::p::p, space :0:0:x}, seq {comp labelHeader:::p::p, space :::x, comp btnExport:::p:115:p}}, space :p:12:p, comp btnImport:::p:115:p, space u:::p, comp btnCreate:::p:115:p}}, space ::115:x}}"
-			"$verticalGroup": "par l {seq l {space :p:57:p, par l {seq {par b {comp btnCreate::b:p:48:p, comp btnImport::b:p:48:p, comp btnExport::b:p:48:p}, space :0:0:x}, seq {comp labelHeader:::p::p, space ::17:x, par b {comp txtSearch::b:p::p, comp btnSearch::b:::x, comp btnFilter::b:p::p}}}, comp scrollPane1:::p:540:p, space :p:54:p}}"
+			"$horizontalGroup": "par l {seq l {space :p:124:p, par t:::p {comp scrollPane1:::p:1255:p, seq {par l {seq {comp txtSearch:::p:350:p, space :0:0:p, comp btnSearch:::p:105:p, space :0:0:x}, seq {comp labelHeader:::p::p, space :::x, comp btnExport:::p:115:p}}, space :p:12:p, comp btnImport:::p:115:p, space u:::p, comp btnCreate:::p:115:p}}, space ::115:x}}"
+			"$verticalGroup": "par l {seq l {space :p:57:p, par l {seq {par b {comp btnCreate::b:p:48:p, comp btnImport::b:p:48:p, comp btnExport::b:p:48:p}, space :0:0:x}, seq {comp labelHeader:::p::p, space ::17:x, par b {comp txtSearch::b:p::p, comp btnSearch::b:::x}}}, comp scrollPane1:::p:540:p, space :p:54:p}}"
 		} ) {
 			name: "this"
 			"preferredSize": new java.awt.Dimension( 1498, 756 )
@@ -88,6 +88,7 @@ new FormModel {
 				"opaque": false
 				addEvent( new FormEvent( "java.awt.event.FocusListener", "focusGained", "txtSearchFocusGained", true ) )
 				addEvent( new FormEvent( "java.awt.event.FocusListener", "focusLost", "txtSearchFocusLost", true ) )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "txtSearchEnterKeyPressed", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "btnSearch"
@@ -100,18 +101,8 @@ new FormModel {
 				"border": new javax.swing.border.LineBorder( new java.awt.Color( 102, 102, 102, 255 ), 1, false )
 				"opaque": false
 				"background": sfield java.awt.SystemColor control
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "btnFilter"
-				"text": "FILTER"
-				"minimumSize": new java.awt.Dimension( 110, 40 )
-				"maximumSize": new java.awt.Dimension( 110, 40 )
-				"preferredSize": new java.awt.Dimension( 110, 40 )
-				"border": new javax.swing.border.LineBorder( new java.awt.Color( 102, 102, 102, 255 ), 1, false )
-				"opaque": false
-				"foreground": new java.awt.Color( 102, 102, 102, 255 )
-				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 16, true )
-				"background": sfield java.awt.SystemColor control
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnSearchMouseClicked", true ) )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnSearchEnterKeyPressed", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "btnImport"
@@ -124,6 +115,8 @@ new FormModel {
 				"opaque": false
 				"foreground": new java.awt.Color( 102, 102, 102, 255 )
 				"background": sfield java.awt.SystemColor control
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnImportMouseClicked", true ) )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnImportEnterKeyPressed", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "btnExport"
@@ -133,6 +126,8 @@ new FormModel {
 				"foreground": new java.awt.Color( 102, 102, 102, 255 )
 				"opaque": false
 				"background": sfield java.awt.SystemColor control
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnExportMouseClicked", true ) )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnExportEnterKeyPressed", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "btnCreate"
@@ -145,6 +140,7 @@ new FormModel {
 				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 16, true )
 				"foreground": new java.awt.Color( 255, 255, 255, 255 )
 				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnCreateMouseClicked", true ) )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnCreateEnterKeyPressed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

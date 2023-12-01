@@ -10,9 +10,11 @@ import com.sms.StudentManagementSystem.Views.ProfilePanel;
 import com.sms.StudentManagementSystem.Views.Student.StudentPanel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -45,6 +47,7 @@ public class UserController {
         }
 
         if (user.getRole().equals("Admin")) {
+
             userPanel.setUserController(this);
             userPanel.setMainForm(mainForm);
             userPanel.loadTable();
@@ -74,6 +77,10 @@ public class UserController {
         return userRepository.findAll();
     }
 
+    public Iterable<User> searchByName(String text) {
+        return userRepository.findByNameContaining(text);
+    }
+
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -90,7 +97,6 @@ public class UserController {
         try {
             userRepository.save(user);
             UtilsController.saveAvatar(user.getEmail(), null);
-            JOptionPane.showMessageDialog(null, "User added successfully!\nThe account password will be: " + user.getPhone(), "Success", JOptionPane.INFORMATION_MESSAGE);
             return true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -134,6 +140,104 @@ public class UserController {
 
     }
 
+    @Transactional
+    public boolean delete(User user) {
+        try {
+            if (!loginHistoryController.deleteByUser(user.getEmail())) {
+                JOptionPane.showMessageDialog(null, "Error: Cannot delete login history", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            userRepository.delete(user);
+
+            if (!UtilsController.removeUserFolder(user.getEmail())) {
+                JOptionPane.showMessageDialog(null, "Error: Cannot delete user folder", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            JOptionPane.showMessageDialog(null, "User deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    public boolean deleteAll() {
+        try {
+            if (!loginHistoryController.deleteAll()) {
+                JOptionPane.showMessageDialog(null, "Error: Cannot delete login history", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            userRepository.deleteAll();
+            commit();
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    public void commit() {
+        userRepository.flush();
+        loginHistoryController.commit();
+    }
+
+    public boolean exportFile(String path) {
+        try {
+            UtilsController<User> utilsController = new UtilsController<>();
+            List<User> users = (List<User>) getAll();
+
+            if (path.contains(".xlsx"))
+                utilsController.exportToExcel(users, path);
+            else if (path.contains(".csv"))
+                utilsController.exportToCSV(users, path);
+            else {
+                JOptionPane.showMessageDialog(null, "Error: Invalid file extension", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    public boolean importFile(String path) {
+        try {
+            UtilsController<User> utilsController = new UtilsController<>();
+            List<User> users;
+
+            if (path.contains(".xlsx"))
+                users = utilsController.importFromExcel(path, User.class);
+            else if (path.contains(".csv"))
+                users = utilsController.importFromCSV(path, User.class);
+            else {
+                JOptionPane.showMessageDialog(null, "Error: Invalid file extension", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            if (users == null || users.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No records found", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            if (deleteAll()) {
+                for (User user : users) {
+                    user.setPassword(user.getPhone());
+                    add(user);
+                }
+            }
+
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
     private boolean isInvalidUser(User user) {
         if (user == null) {
             JOptionPane.showMessageDialog(null, "User is null", "Error", JOptionPane.ERROR_MESSAGE);
@@ -166,38 +270,11 @@ public class UserController {
         }
 
         if (!UtilsController.PASSWORD_PATTERN.matcher(password).matches()) {
-            JOptionPane.showMessageDialog(null, "Password must be at least 8 characters including (a-z), (A-Z), (0-9)", "Error", JOptionPane.ERROR_MESSAGE);
+            String message = "Password must be at least 8 characters including (a-z), (A-Z), (0-9)\n\nEnsure Unikey or similar software is turned off before entering your password";
+            JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
             return true;
         }
         return false;
-    }
-
-    public boolean delete(User user) {
-        try {
-            if (!loginHistoryController.deleteByUser(user.getEmail())) {
-                JOptionPane.showMessageDialog(null, "Error: Cannot delete login history", "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-
-            userRepository.delete(user);
-            commit();
-            loginHistoryController.commit();
-
-            if (!UtilsController.removeUserFolder(user.getEmail())) {
-                JOptionPane.showMessageDialog(null, "Error: Cannot delete user folder", "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-
-            JOptionPane.showMessageDialog(null, "User deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-            return true;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
-
-    public void commit() {
-        userRepository.flush();
     }
 
 }

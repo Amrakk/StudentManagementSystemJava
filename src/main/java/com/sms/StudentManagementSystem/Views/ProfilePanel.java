@@ -65,11 +65,6 @@ public class ProfilePanel extends JPanel {
         this.mainForm = mainForm;
     }
 
-    private void btnUserManagementMouseClicked(MouseEvent e) {
-        mainForm.loadUserForm();
-        mainForm.userPanelLoadTable();
-    }
-
     private void btnChangePasswordMouseClicked(MouseEvent e) {
         String newPassword = String.valueOf(txtNewPassword.getPassword());
         String confirmPassword = String.valueOf(txtConfirmPassword.getPassword());
@@ -95,6 +90,11 @@ public class ProfilePanel extends JPanel {
             btnChangePasswordMouseClicked(null);
     }
 
+    private void btnChangePasswordEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnChangePasswordMouseClicked(null);
+    }
+
     private void btnChangeAvatarMouseClicked(MouseEvent e) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Choose an image");
@@ -114,12 +114,28 @@ public class ProfilePanel extends JPanel {
         }
     }
 
+    private void btnChangeAvatarEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnChangeAvatarMouseClicked(null);
+    }
+
+    private void btnUserManagementMouseClicked(MouseEvent e) {
+        mainForm.loadUserForm();
+        mainForm.userPanelLoadTable();
+    }
+
+    private void btnUserManagementEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnUserManagementMouseClicked(null);
+    }
+
     private void btnLoginHistoryMouseClicked(MouseEvent e) {
         mainForm.openLoginHistoryForm();
     }
 
-    private void btnChangePasswordEnterKeyPressed(KeyEvent e) {
-        btnChangePasswordMouseClicked(null);
+    private void btnLoginHistoryEnterKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            btnLoginHistoryMouseClicked(null);
     }
 
     private void initComponents() {
@@ -434,6 +450,12 @@ public class ProfilePanel extends JPanel {
                 btnChangeAvatarMouseClicked(e);
             }
         });
+        btnChangeAvatar.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                btnChangeAvatarEnterKeyPressed(e);
+            }
+        });
 
         //======== panelAdmin ========
         {
@@ -456,6 +478,12 @@ public class ProfilePanel extends JPanel {
                     btnUserManagementMouseClicked(e);
                 }
             });
+            btnUserManagement.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    btnUserManagementEnterKeyPressed(e);
+                }
+            });
 
             //---- btnLoginHistory ----
             btnLoginHistory.setText("Login History");
@@ -466,6 +494,12 @@ public class ProfilePanel extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     btnLoginHistoryMouseClicked(e);
+                }
+            });
+            btnLoginHistory.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    btnLoginHistoryEnterKeyPressed(e);
                 }
             });
 

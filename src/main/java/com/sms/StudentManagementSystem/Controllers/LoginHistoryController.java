@@ -32,6 +32,17 @@ public class LoginHistoryController {
     }
 
     @Transactional
+    public boolean deleteAll() {
+        try {
+            loginHistoryRepository.deleteAll();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    @Transactional
     public void commit() {
         loginHistoryRepository.flush();
     }

@@ -14,6 +14,10 @@ public class MajorController {
         return majorRepository.findAll();
     }
 
+    public Major getByName(String name) {
+        return majorRepository.findByName(name);
+    }
+
     public int count() {
         return (int) majorRepository.count();
     }
@@ -24,14 +28,6 @@ public class MajorController {
 
     public Major findById(String id) {
         return majorRepository.findById(id).orElse(null);
-    }
-
-    public void deleteAll() {
-        majorRepository.deleteAll();
-    }
-
-    public void deleteById(String id) {
-        majorRepository.deleteById(id);
     }
 
 }
