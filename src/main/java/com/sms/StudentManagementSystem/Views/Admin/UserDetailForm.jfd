@@ -128,6 +128,7 @@ new FormModel {
 					"foreground": &Color3 new java.awt.Color( 51, 51, 51, 255 )
 					"border": &LineBorder0 new javax.swing.border.LineBorder( new java.awt.Color( 51, 51, 51, 255 ), 1, true )
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnResetAvatarMouseClicked", true ) )
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnResetAvatarEnterKeyPressed", true ) )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "btnSave"
@@ -139,6 +140,7 @@ new FormModel {
 					"minimumSize": new java.awt.Dimension( 172, 38 )
 					"preferredSize": new java.awt.Dimension( 172, 38 )
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnSaveMouseClicked", true ) )
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnSaveKeyPressed", true ) )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "btnReset"
@@ -148,6 +150,7 @@ new FormModel {
 					"foreground": #Color3
 					"border": #LineBorder0
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnResetMouseClicked", true ) )
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnResetEnterKeyPressed", true ) )
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "cbRole"
@@ -236,6 +239,7 @@ new FormModel {
 					"foreground": sfield java.awt.Color white
 					"border": new javax.swing.border.LineBorder( new java.awt.Color( 255, 0, 0, 255 ), 1, true )
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnDeleteMouseClicked", true ) )
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnDeleteEnterKeyPressed", true ) )
 				} )
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {

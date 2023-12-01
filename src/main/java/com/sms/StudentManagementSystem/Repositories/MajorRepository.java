@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface MajorRepository extends CrudRepository<Major, String> {
 
     Iterable<Major> findAllByDepartmentId(String departmentId);
+
+    Major findByName(String name);
 }
