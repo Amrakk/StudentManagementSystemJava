@@ -2,6 +2,7 @@ package com.sms.StudentManagementSystem.Controllers;
 
 import com.sms.StudentManagementSystem.Views.Admin.LoginHistoryForm;
 import com.sms.StudentManagementSystem.Views.Admin.UserDetailForm;
+import com.sms.StudentManagementSystem.Views.Student.AddStudentForm;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ public class FormController {
     @Autowired
     private UserDetailForm userDetailForm;
 
+
 //    @Autowired
 //    private CertificateController certificateController;
 //    @Autowired
@@ -23,4 +25,6 @@ public class FormController {
 //    private DepartmentController departmentController;
 //    @Autowired
 //    private MajorController majorController;
+
+
 }

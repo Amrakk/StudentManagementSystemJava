@@ -27,6 +27,7 @@ public class StudentDetailForm extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
+        // Generated using JFormDesigner Evaluation license - Tri
         panelProfile = new JPanel();
         labelName = new JLabel();
         txtName = new JTextField();
@@ -60,6 +61,11 @@ public class StudentDetailForm extends JFrame {
             panelProfile.setForeground(new Color(0x333333));
             panelProfile.setOpaque(false);
             panelProfile.setFont(new Font("Segoe UI", panelProfile.getFont().getStyle(), 12));
+            panelProfile.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(
+            0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder
+            .BOTTOM,new java.awt.Font("D\u0069alog",java.awt.Font.BOLD,12),java.awt.Color.
+            red),panelProfile. getBorder()));panelProfile. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.
+            beans.PropertyChangeEvent e){if("\u0062order".equals(e.getPropertyName()))throw new RuntimeException();}});
 
             //---- labelName ----
             labelName.setText("NAME");
@@ -312,6 +318,7 @@ public class StudentDetailForm extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
+    // Generated using JFormDesigner Evaluation license - Tri
     private JPanel panelProfile;
     private JLabel labelName;
     private JTextField txtName;

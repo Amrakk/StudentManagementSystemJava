@@ -9,4 +9,5 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     Iterable<Student> findByGenderAndEduTypeAndMajorIdAndDepartmentId(String gender, String eduType, String majorId, String departmentId);
 
     Iterable<Student> searchByName(String text);
+
 }

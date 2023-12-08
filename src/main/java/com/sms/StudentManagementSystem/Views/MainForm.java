@@ -5,12 +5,15 @@
 package com.sms.StudentManagementSystem.Views;
 
 import com.sms.StudentManagementSystem.Controllers.FormController;
+import com.sms.StudentManagementSystem.Controllers.StudentController;
 import com.sms.StudentManagementSystem.Controllers.UserController;
+import com.sms.StudentManagementSystem.Models.Student;
 import com.sms.StudentManagementSystem.Models.User;
 import com.sms.StudentManagementSystem.Views.Admin.LoginHistoryForm;
 import com.sms.StudentManagementSystem.Views.Admin.UserDetailForm;
 import com.sms.StudentManagementSystem.Views.Admin.UserPanel;
 import com.sms.StudentManagementSystem.Views.Auth.LoginForm;
+import com.sms.StudentManagementSystem.Views.Student.AddStudentForm;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,12 @@ public class MainForm extends JFrame {
 
     @Setter
     private UserController userController;
+
+    @Setter
+    private StudentController studentController;
+
+    @Autowired
+    private AddStudentForm addStudentForm;
 
     public MainForm() {
         if (GraphicsEnvironment.isHeadless()) System.out.println("Headless mode");
