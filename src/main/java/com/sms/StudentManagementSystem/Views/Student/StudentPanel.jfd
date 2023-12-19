@@ -1,11 +1,11 @@
-JFDML JFormDesigner: "8.2.0.0.338" Java: "17.0.9" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.0.0.331" Java: "17.0.8.1" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:124:p, comp labelHeader:::p::p, space ::1253:x}}"
-			"$verticalGroup": "par l {seq l {space :p:57:p, comp labelHeader:::p::p, space ::656:x}}"
+			"$horizontalGroup": "par l {seq {space :p:124:p, par l {comp labelHeader:::p::p, seq l {space :p:18:p, par l {comp scrollPane1:::p:1017:p, seq {comp txtSearch:::p:350:p, space :::p, comp btnSearch:::p:105:p, space :p:194:p, comp btnExport:::p:115:p, space :::p, comp btnImport:::p:115:p, space :::p, comp btnCreate:::p:120:p}}}}, space :::x}}"
+			"$verticalGroup": "par l {seq l {space :p:57:p, comp labelHeader:::p::p, space u:::p, par b {comp txtSearch::b:p::p, comp btnSearch::b:p::p, comp btnExport::b:p:48:p, comp btnImport::b:p:48:p, comp btnCreate::b:p:48:p}, space :::p, comp scrollPane1:::p::p, space :::x}}"
 		} ) {
 			name: "this"
 			"preferredSize": new java.awt.Dimension( 1498, 756 )
@@ -18,9 +18,127 @@ new FormModel {
 				"foreground": new java.awt.Color( 51, 51, 51, 255 )
 				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 131073, 36, true )
 			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "txtSearch"
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 196608, 18, true )
+				"minimumSize": new java.awt.Dimension( 60, 40 )
+				"preferredSize": new java.awt.Dimension( 60, 40 )
+				"foreground": new java.awt.Color( 51, 51, 51, 255 )
+				"text": "Search by Name"
+				"border": new javax.swing.border.LineBorder( new java.awt.Color( 51, 51, 51, 255 ), 1, false )
+				"opaque": false
+				addEvent( new FormEvent( "java.awt.event.FocusListener", "focusGained", "txtSearchFocusGained", true ) )
+				addEvent( new FormEvent( "java.awt.event.FocusListener", "focusLost", "txtSearchFocusLost", true ) )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "txtSearchEnterKeyPressed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnSearch"
+				"text": "FIND"
+				"maximumSize": new java.awt.Dimension( 110, 40 )
+				"minimumSize": new java.awt.Dimension( 110, 40 )
+				"preferredSize": new java.awt.Dimension( 110, 40 )
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 16, true )
+				"foreground": new java.awt.Color( 102, 102, 102, 255 )
+				"border": new javax.swing.border.LineBorder( new java.awt.Color( 102, 102, 102, 255 ), 1, false )
+				"opaque": false
+				"background": sfield java.awt.SystemColor control
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnSearchMouseClicked", true ) )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnSearchEnterKeyPressed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnExport"
+				"text": "EXPORT"
+				"border": new javax.swing.border.LineBorder( new java.awt.Color( 102, 102, 102, 255 ), 1, true )
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 16, true )
+				"foreground": new java.awt.Color( 102, 102, 102, 255 )
+				"opaque": false
+				"background": sfield java.awt.SystemColor control
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnExportMouseClicked", true ) )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnExportEnterKeyPressed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnImport"
+				"text": "IMPORT"
+				"preferredSize": new java.awt.Dimension( 118, 38 )
+				"maximumSize": new java.awt.Dimension( 118, 38 )
+				"minimumSize": new java.awt.Dimension( 118, 38 )
+				"font": new com.jformdesigner.model.SwingDerivedFont( "Segoe UI", 1, 16, true )
+				"border": new javax.swing.border.LineBorder( new java.awt.Color( 102, 102, 102, 255 ), 1, true )
+				"opaque": false
+				"foreground": new java.awt.Color( 102, 102, 102, 255 )
+				"background": sfield java.awt.SystemColor control
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnImportMouseClicked", true ) )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnImportEnterKeyPressed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnCreate"
+				"text": "CREATE"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnCreateMouseClicked", true ) )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "btnCreateEnterKeyPressed", true ) )
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				add( new FormComponent( "javax.swing.JTable" ) {
+					name: "tblStudent"
+					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+						add( new java.util.Vector {
+							add( null )
+							add( "" )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+					}, new java.util.Vector {
+						add( "Id" )
+						add( "Name" )
+						add( "DoB" )
+						add( "Gender" )
+						add( "EduType" )
+						add( "CourseYear" )
+						add( "ClassName" )
+						add( "Department" )
+						add( "Major" )
+					}, new java.util.Vector {
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+					}, new java.util.Vector {
+						add( false )
+						add( false )
+						add( false )
+						add( false )
+						add( false )
+						add( false )
+						add( false )
+						add( false )
+						add( false )
+					}, new java.util.Vector {
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+					} )
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseReleased", "tblStudentMouseDoubleClick", true ) )
+				} )
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 15, 15 )
-			"size": new java.awt.Dimension( 1195, 605 )
+			"size": new java.awt.Dimension( 1115, 605 )
 		} )
 	}
 }

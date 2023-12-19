@@ -28,6 +28,16 @@ public class Certificate {
     @ManyToOne
     private Student student;
 
+//    public Certificate(String id, String tittle, String desc, Boolean isValid, Date issueD, Date expiredD, String organization) {
+//        this.id = id;
+//        this.title = tittle;
+//        this.description = desc;
+//        this.isValid = isValid;
+//        this.issuedDate = issueD;
+//        this.expiredDate = expiredD;
+//        this.organization = organization;
+//    }
+
     @Override
     public String toString() {
         return "Certificate{" +
@@ -39,5 +49,9 @@ public class Certificate {
                 ", organization='" + organization + '\'' +
                 ", isValid=" + isValid +
                 '}';
+    }
+
+    public boolean getValid() {
+        return isValid;
     }
 }

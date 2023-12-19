@@ -1,16 +1,97 @@
-JFDML JFormDesigner: "8.2.0.0.338" Java: "17.0.8.1" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.0.0.331" Java: "17.0.8.1" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {space :0:400:x}"
-			"$verticalGroup": "par l {space :0:300:x}"
+			"$horizontalGroup": "par l {seq t {space ::377:x, comp btnAdd:::p:101:p, space :p:95:p}, seq l {space :p:32:p, par t:::p {seq l {comp labelDoB:::p::p, space :::x, comp dcDoB:::p:137:p}, seq l {par l {seq l {par l {comp labelName::l:p::p, comp labelGender::l:p::p, comp labelEduT::l:p::p, comp labelCourseY::l:p::p, comp labelClassN::l:p::p, comp labelStudentID::l:p::p, comp label1::l:p:151:p, comp labelDepartmentID::l:p::p}, space :::p}, seq t {comp labelMajorID:::p::p, space :p:110:p}}, par l:::p {comp textName::l::0:x, comp textEduType::l::0:x, comp textCYear::l::0:x, comp textCName::l::0:x, seq l {comp radioGender1:::p::p, space s:::p, comp radioGender2:::p::p}, comp textStudentID::::0:x, comp cbDepartmentID::l:::x, comp cbMajorID::l:::x}}}, space ::247:x}}"
+			"$verticalGroup": "par l {seq l {comp label1:::p:60:p, space :p:8:p, par b {comp labelStudentID::b:p::p, comp textStudentID::b:p::p}, space :::p, par b {comp labelName::b:p::p, comp textName::b:p::p}, space :::p, par b {comp labelDoB::b:p::p, comp dcDoB::b::30:x}, space :::p, par b {comp labelGender::b:p::p, comp radioGender1::b:p::p, comp radioGender2::b:p::p}, space :::p, par b {comp labelEduT::b:p::p, comp textEduType::b:p::p}, space :::p, par b {comp labelCourseY::b:p::p, comp textCYear::b:p::p}, space :::p, par b {comp labelClassN::b:p::p, comp textCName::b:p::p}, space :::p, par b {comp labelDepartmentID::b:p::p, comp cbDepartmentID::b:p::p}, space :::p, par b {comp labelMajorID::b:p::p, comp cbMajorID::b:p::p}, space :p:7:p, comp btnAdd:::p:47:p, space :p:19:p}}"
 		} ) {
 			name: "this"
+			"minimumSize": new java.awt.Dimension( 575, 475 )
+			"preferredSize": new java.awt.Dimension( 575, 475 )
+			"title": "Add Student Form"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "Add Student Form"
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 16, true )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelName"
+				"text": "Name"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelDoB"
+				"text": "Date of Birth"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelGender"
+				"text": "Gender"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textName"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelEduT"
+				"text": "EduType"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textEduType"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelCourseY"
+				"text": "Course Year"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textCYear"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelClassN"
+				"text": "Class Name"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textCName"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "radioGender1"
+				"text": "Male"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "radioGender2"
+				"text": "Female"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnAdd"
+				"text": "Add"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "btnAddMouseClicked", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelStudentID"
+				"text": "StudentID"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textStudentID"
+			} )
+			add( new FormComponent( "com.toedter.calendar.JDateChooser" ) {
+				name: "dcDoB"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelDepartmentID"
+				"text": "DepartmentID"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelMajorID"
+				"text": "MajorID"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "cbDepartmentID"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "cbMajorID"
+			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 400, 300 )
+			"size": new java.awt.Dimension( 575, 475 )
+			"location": new java.awt.Point( 5, 5 )
 		} )
 	}
 }

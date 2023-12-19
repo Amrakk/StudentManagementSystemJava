@@ -39,7 +39,7 @@ public class App {
     public CommandLineRunner setup() {
         return args -> {
             try {
-                if (majorController.count() != 0 && departmentController.count() != 0) {
+                if (majorController.count() == 0 && departmentController.count() == 0) {
                     departmentController.add(new Department("E&EE", "Electrical and Electronic Engineering", 2, null, null));
                     departmentController.add(new Department("F&B", "Food and Beverage", 3, null, null));
                     departmentController.add(new Department("IT", "Information Technology", 5, null, null));
