@@ -25,4 +25,14 @@ public class Major {
     private Department department;
     @OneToMany(mappedBy = "major")
     private List<Student> students;
+
+//    @Override
+//    public String toString() {
+//        return "Major{" +
+//                "id='" + id + '\'' +
+//                ", name='" + name + '\'' +
+//                ", department=" + department +
+//                ", students=" + students +
+//                '}';
+//    }
 }

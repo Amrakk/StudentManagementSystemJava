@@ -32,6 +32,14 @@ public class UserController {
     private ProfilePanel profilePanel;
     @Autowired
     private UserPanel userPanel;
+    @Autowired
+    private StudentController studentController;
+    @Autowired
+    private DepartmentController departmentController;
+    @Autowired
+    private MajorController majorController;
+    @Autowired
+    private CertificateController certificateController;
 
     public boolean login(String email, String password, LoginForm loginForm) {
         User user = getUserByEmail(email);
@@ -47,7 +55,6 @@ public class UserController {
         }
 
         if (user.getRole().equals("Admin")) {
-
             userPanel.setUserController(this);
             userPanel.setMainForm(mainForm);
             userPanel.loadTable();
@@ -60,9 +67,17 @@ public class UserController {
         mainForm.setUser(user);
         mainForm.setUserController(this);
         mainForm.setLoginForm(loginForm);
+        mainForm.setStudentController(studentController);
+        mainForm.setDepartmentController(departmentController);
+        mainForm.setMajorController(majorController);
+        mainForm.setCertificateController(certificateController);
 
         JPanel panelBody = mainForm.getPanelBody();
         panelBody.add(studentPanel, "StudentPanel", 0);
+        studentPanel.setStudentController(studentController);
+        studentPanel.loadTable();
+        studentPanel.setMainForm(mainForm);
+        studentPanel.setUser(user);
         panelBody.add(profilePanel, "ProfilePanel", 1);
         panelBody.add(userPanel, "UserPanel", 2);
 

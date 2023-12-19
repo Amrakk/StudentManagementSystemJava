@@ -4,9 +4,9 @@
 
 package com.sms.StudentManagementSystem.Views;
 
-import com.sms.StudentManagementSystem.Controllers.FormController;
-import com.sms.StudentManagementSystem.Controllers.StudentController;
-import com.sms.StudentManagementSystem.Controllers.UserController;
+import com.sms.StudentManagementSystem.Controllers.*;
+import com.sms.StudentManagementSystem.Models.Certificate;
+import com.sms.StudentManagementSystem.Models.Major;
 import com.sms.StudentManagementSystem.Models.Student;
 import com.sms.StudentManagementSystem.Models.User;
 import com.sms.StudentManagementSystem.Views.Admin.LoginHistoryForm;
@@ -14,6 +14,8 @@ import com.sms.StudentManagementSystem.Views.Admin.UserDetailForm;
 import com.sms.StudentManagementSystem.Views.Admin.UserPanel;
 import com.sms.StudentManagementSystem.Views.Auth.LoginForm;
 import com.sms.StudentManagementSystem.Views.Student.AddStudentForm;
+import com.sms.StudentManagementSystem.Views.Student.StudentDetailForm;
+import com.sms.StudentManagementSystem.Views.Student.StudentPanel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +44,22 @@ public class MainForm extends JFrame {
     @Setter
     private UserController userController;
 
+    private Student student;
+
     @Setter
     private StudentController studentController;
 
     @Autowired
     private AddStudentForm addStudentForm;
+
+    @Setter
+    private DepartmentController departmentController;
+
+    @Setter
+    private MajorController majorController;
+
+    @Setter
+    private CertificateController certificateController;
 
     public MainForm() {
         if (GraphicsEnvironment.isHeadless()) System.out.println("Headless mode");
@@ -67,6 +80,7 @@ public class MainForm extends JFrame {
     }
 
     private void btnLogoMouseClicked(MouseEvent e) {
+        studentPanelLoadTable();
         card.show(panelBody, "StudentPanel");
     }
 
@@ -122,6 +136,37 @@ public class MainForm extends JFrame {
         this.user = user;
         btnProfile.setText(user.getName());
     }
+
+    // Trong MainForm
+    public void showAddForm() {
+        // Hiển thị AddStudentForm
+        AddStudentForm addStudentForm = formController.getAddStudentForm();
+        addStudentForm.setStudentController(studentController);
+        addStudentForm.setDepartmentController(departmentController);
+        addStudentForm.setMajorController(majorController);
+        addStudentForm.setMainForm(this);
+        addStudentForm.loadAddForm();
+        addStudentForm.setVisible(true);
+    }
+
+    public void studentPanelLoadTable(){
+        StudentPanel studentPanel = (StudentPanel) panelBody.getComponent(0);
+        studentPanel.loadTable();
+    }
+
+    public void openStudentDetailForm(Student student) {
+        StudentDetailForm studentDetailForm = new StudentDetailForm(student);
+        studentDetailForm.setDepartmentController(departmentController);
+        studentDetailForm.setMajorController(majorController);
+        studentDetailForm.setCertificateController(certificateController);
+        studentDetailForm.setStudentController(studentController);
+        studentDetailForm.setMainForm(this);
+        studentDetailForm.setUser(user);
+        studentDetailForm.loadStudentDetail();
+        studentDetailForm.setVisible(true);
+    }
+
+
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off

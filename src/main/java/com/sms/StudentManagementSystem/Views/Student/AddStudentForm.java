@@ -4,17 +4,24 @@
 
 package com.sms.StudentManagementSystem.Views.Student;
 
-import com.sms.StudentManagementSystem.Controllers.StudentController;
-import com.sms.StudentManagementSystem.Controllers.UserController;
+import java.awt.event.*;
+
+import com.sms.StudentManagementSystem.Controllers.*;
+import com.sms.StudentManagementSystem.Models.Department;
+import com.sms.StudentManagementSystem.Models.Major;
 import com.sms.StudentManagementSystem.Models.Student;
 import com.sms.StudentManagementSystem.Views.MainForm;
+import com.toedter.calendar.*;
 import lombok.Setter;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
+import java.time.Instant;
+import java.util.Date;
+import java.util.List;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 /**
  * @author hoang
@@ -32,171 +39,315 @@ public class AddStudentForm extends JFrame {
     @Setter
     private StudentController studentController;
 
+    private List<Department> departments;
+
+    @Setter
+    private DepartmentController departmentController;
+
+    private List<Major> majors;
+
+    @Setter
+    private MajorController majorController;
+
     public AddStudentForm() {
-        initComponents();
+        if (GraphicsEnvironment.isHeadless()) System.out.println("Headless mode");
+        else initComponents();
+
+        //---- dcDoB ----
+        dcDoB.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+        dcDoB.setBorder(new LineBorder(new Color(0x666666), 1, true));
+        dcDoB.setForeground(new Color(0x666666));
+        dcDoB.setDate(Date.from(Instant.now()));
+        dcDoB.setDateFormatString("dd/MM/yyyy");
+        dcDoB.setOpaque(false);
     }
 
-    public void setEditable(boolean editable) {
-        textName.setEditable(editable);
-        textDoB.setEditable(editable);
-        textEduType.setEditable(editable);
-        textCYear.setEditable(editable);
-        textCName.setEditable(editable);
+    public void loadAddForm() {
+        departments = departmentController.findAll();
+        majors = majorController.getAll();
+
+        cbDepartmentID.setRenderer(new DepartmentObjectRenderer());
+        cbMajorID.setRenderer(new MajorObjectRenderer());
+
+        departments.forEach(d -> {
+            cbDepartmentID.addItem(d);
+        });
+        majors.forEach(m -> {
+            cbMajorID.addItem(m);
+        });
+    }
+
+    private void btnAddMouseClicked(MouseEvent e) {
+        // TODO add your code here
+
+        String id = textStudentID.getText();
+        String name = textName.getText();
+        Date dob = dcDoB.getDate();
+        String gender = radioGender1.isSelected() ? "Male" : "Female";
+        String eduType = textEduType.getText();
+        String courseYear = textCYear.getText();
+        String className = textCName.getText();
+        Object departmentID = cbDepartmentID.getSelectedItem();
+        Object majorID = cbMajorID.getSelectedItem();
+
+        if (departmentID == null) departmentID = "";
+        if (majorID == null) majorID = "";
+
+        if(student == null){
+            student = new Student(id, name, dob, gender, eduType, courseYear, className, (Department) departmentID, (Major) majorID);
+
+            if(studentController.addS(student)){
+                System.out.println(student + "\n Add Student Success");
+                JOptionPane.showMessageDialog(null, "Student added successfully!" , "Success", JOptionPane.INFORMATION_MESSAGE);
+                mainForm.studentPanelLoadTable();
+                dispose();
+            }
+        }
+        else{
+            textStudentID.setText(student.getId());
+            textName.setText(student.getName());
+            dcDoB.setDate(student.getDob());
+            if (student.getGender().equals("Male")){
+                radioGender1.setSelected(true);
+            }
+            else{
+                radioGender2.setSelected(true);
+            }
+            textEduType.setText(student.getEduType());
+            textCYear.setText(student.getCourseYear());
+            textCName.setText(student.getClassName());
+            if(studentController.updateS(student)){
+                mainForm.studentPanelLoadTable();
+            }
+        }
     }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - Tri
-        this2 = new JFrame();
         label1 = new JLabel();
-        label2 = new JLabel();
-        label3 = new JLabel();
-        label4 = new JLabel();
+        labelName = new JLabel();
+        labelDoB = new JLabel();
+        labelGender = new JLabel();
         textName = new JTextField();
-        label5 = new JLabel();
+        labelEduT = new JLabel();
         textEduType = new JTextField();
-        label6 = new JLabel();
+        labelCourseY = new JLabel();
         textCYear = new JTextField();
-        label7 = new JLabel();
+        labelClassN = new JLabel();
         textCName = new JTextField();
         radioGender1 = new JRadioButton();
         radioGender2 = new JRadioButton();
         btnAdd = new JButton();
-        btnCancel = new JButton();
-        textDoB = new JTextField();
+        labelStudentID = new JLabel();
+        textStudentID = new JTextField();
+        dcDoB = new JDateChooser();
+        labelDepartmentID = new JLabel();
+        labelMajorID = new JLabel();
+        cbDepartmentID = new JComboBox();
+        cbMajorID = new JComboBox();
 
-        //======== this2 ========
-        {
-            var this2ContentPane = this2.getContentPane();
+        //======== this ========
+        setMinimumSize(new Dimension(575, 475));
+        setPreferredSize(new Dimension(575, 475));
+        setTitle("Add Student Form");
+        var contentPane = getContentPane();
 
-            //---- label1 ----
-            label1.setText("Add Student Form");
-            label1.setFont(label1.getFont().deriveFont(label1.getFont().getStyle() | Font.BOLD, 16f));
+        //---- label1 ----
+        label1.setText("Add Student Form");
+        label1.setFont(label1.getFont().deriveFont(label1.getFont().getStyle() | Font.BOLD, 16f));
 
-            //---- label2 ----
-            label2.setText("Name");
+        //---- labelName ----
+        labelName.setText("Name");
 
-            //---- label3 ----
-            label3.setText("Date of Birth");
+        //---- labelDoB ----
+        labelDoB.setText("Date of Birth");
 
-            //---- label4 ----
-            label4.setText("Gender");
+        //---- labelGender ----
+        labelGender.setText("Gender");
 
-            //---- label5 ----
-            label5.setText("EduType");
+        //---- labelEduT ----
+        labelEduT.setText("EduType");
 
-            //---- label6 ----
-            label6.setText("Course Year");
+        //---- labelCourseY ----
+        labelCourseY.setText("Course Year");
 
-            //---- label7 ----
-            label7.setText("Class Name");
+        //---- labelClassN ----
+        labelClassN.setText("Class Name");
 
-            //---- radioGender1 ----
-            radioGender1.setText("Male");
+        //---- radioGender1 ----
+        radioGender1.setText("Male");
 
-            //---- radioGender2 ----
-            radioGender2.setText("Female");
+        //---- radioGender2 ----
+        radioGender2.setText("Female");
 
-            //---- btnAdd ----
-            btnAdd.setText("Add");
+        //---- btnAdd ----
+        btnAdd.setText("Add");
+        btnAdd.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                btnAddMouseClicked(e);
+            }
+        });
 
-            //---- btnCancel ----
-            btnCancel.setText("Cancel");
+        //---- labelStudentID ----
+        labelStudentID.setText("StudentID");
 
-            GroupLayout this2ContentPaneLayout = new GroupLayout(this2ContentPane);
-            this2ContentPane.setLayout(this2ContentPaneLayout);
-            this2ContentPaneLayout.setHorizontalGroup(
-                this2ContentPaneLayout.createParallelGroup()
-                    .addGroup(this2ContentPaneLayout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(this2ContentPaneLayout.createParallelGroup()
-                            .addComponent(label1, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)
-                            .addGroup(this2ContentPaneLayout.createSequentialGroup()
-                                .addGroup(this2ContentPaneLayout.createParallelGroup()
-                                    .addComponent(label3)
-                                    .addComponent(label2)
-                                    .addComponent(label4)
-                                    .addComponent(label5)
-                                    .addComponent(label6)
-                                    .addComponent(label7))
-                                .addGap(46, 46, 46)
-                                .addGroup(this2ContentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(textName, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                    .addComponent(textEduType, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                    .addComponent(textCYear, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                    .addComponent(textCName, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                    .addGroup(this2ContentPaneLayout.createSequentialGroup()
-                                        .addComponent(radioGender1)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(radioGender2))
-                                    .addComponent(textDoB, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)))
-                            .addGroup(this2ContentPaneLayout.createSequentialGroup()
-                                .addGap(112, 112, 112)
-                                .addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
-                                .addGap(49, 49, 49)
-                                .addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(153, Short.MAX_VALUE))
-            );
-            this2ContentPaneLayout.setVerticalGroup(
-                this2ContentPaneLayout.createParallelGroup()
-                    .addGroup(this2ContentPaneLayout.createSequentialGroup()
-                        .addComponent(label1, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(this2ContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(label2)
-                            .addComponent(textName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(this2ContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(label3)
-                            .addComponent(textDoB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(this2ContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(label4)
-                            .addComponent(radioGender1)
-                            .addComponent(radioGender2))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(this2ContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(label5)
-                            .addComponent(textEduType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(this2ContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(label6)
-                            .addComponent(textCYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(this2ContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(label7)
-                            .addComponent(textCName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(this2ContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 114, Short.MAX_VALUE))
-            );
-            this2.pack();
-            this2.setLocationRelativeTo(this2.getOwner());
-        }
+        //---- labelDepartmentID ----
+        labelDepartmentID.setText("DepartmentID");
+
+        //---- labelMajorID ----
+        labelMajorID.setText("MajorID");
+
+        GroupLayout contentPaneLayout = new GroupLayout(contentPane);
+        contentPane.setLayout(contentPaneLayout);
+        contentPaneLayout.setHorizontalGroup(
+            contentPaneLayout.createParallelGroup()
+                .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
+                    .addContainerGap(377, Short.MAX_VALUE)
+                    .addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
+                    .addGap(95, 95, 95))
+                .addGroup(contentPaneLayout.createSequentialGroup()
+                    .addGap(32, 32, 32)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(GroupLayout.Alignment.LEADING, contentPaneLayout.createSequentialGroup()
+                            .addComponent(labelDoB)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dcDoB, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE))
+                        .addGroup(GroupLayout.Alignment.LEADING, contentPaneLayout.createSequentialGroup()
+                            .addGroup(contentPaneLayout.createParallelGroup()
+                                .addGroup(contentPaneLayout.createSequentialGroup()
+                                    .addGroup(contentPaneLayout.createParallelGroup()
+                                        .addComponent(labelName)
+                                        .addComponent(labelGender)
+                                        .addComponent(labelEduT)
+                                        .addComponent(labelCourseY)
+                                        .addComponent(labelClassN)
+                                        .addComponent(labelStudentID)
+                                        .addComponent(label1, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(labelDepartmentID))
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED))
+                                .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
+                                    .addComponent(labelMajorID)
+                                    .addGap(110, 110, 110)))
+                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                .addComponent(textName, GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
+                                .addComponent(textEduType, GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
+                                .addComponent(textCYear, GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
+                                .addComponent(textCName, GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
+                                .addGroup(contentPaneLayout.createSequentialGroup()
+                                    .addComponent(radioGender1)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(radioGender2))
+                                .addComponent(textStudentID, GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
+                                .addComponent(cbDepartmentID)
+                                .addComponent(cbMajorID))))
+                    .addContainerGap(247, Short.MAX_VALUE))
+        );
+        contentPaneLayout.setVerticalGroup(
+            contentPaneLayout.createParallelGroup()
+                .addGroup(contentPaneLayout.createSequentialGroup()
+                    .addComponent(label1, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+                    .addGap(8, 8, 8)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(labelStudentID)
+                        .addComponent(textStudentID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(labelName)
+                        .addComponent(textName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(labelDoB)
+                        .addComponent(dcDoB, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(labelGender)
+                        .addComponent(radioGender1)
+                        .addComponent(radioGender2))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(labelEduT)
+                        .addComponent(textEduType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(labelCourseY)
+                        .addComponent(textCYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(labelClassN)
+                        .addComponent(textCName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(labelDepartmentID)
+                        .addComponent(cbDepartmentID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(labelMajorID)
+                        .addComponent(cbMajorID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addGap(7, 7, 7)
+                    .addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+                    .addGap(19, 19, 19))
+        );
+        pack();
+        setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - Tri
-    private JFrame this2;
     private JLabel label1;
-    private JLabel label2;
-    private JLabel label3;
-    private JLabel label4;
+    private JLabel labelName;
+    private JLabel labelDoB;
+    private JLabel labelGender;
     private JTextField textName;
-    private JLabel label5;
+    private JLabel labelEduT;
     private JTextField textEduType;
-    private JLabel label6;
+    private JLabel labelCourseY;
     private JTextField textCYear;
-    private JLabel label7;
+    private JLabel labelClassN;
     private JTextField textCName;
     private JRadioButton radioGender1;
     private JRadioButton radioGender2;
     private JButton btnAdd;
-    private JButton btnCancel;
-    private JTextField textDoB;
-
+    private JLabel labelStudentID;
+    private JTextField textStudentID;
+    private JDateChooser dcDoB;
+    private JLabel labelDepartmentID;
+    private JLabel labelMajorID;
+    private JComboBox cbDepartmentID;
+    private JComboBox cbMajorID;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
+}
+
+class DepartmentObjectRenderer extends DefaultListCellRenderer {
+    @Override
+    public java.awt.Component getListCellRendererComponent(
+            JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+
+        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+        if (value instanceof Department) {
+            Department yourObject = (Department) value;
+            setText(yourObject.getName());
+        }
+
+        return this;
+    }
+}
+
+class MajorObjectRenderer extends DefaultListCellRenderer {
+    @Override
+    public java.awt.Component getListCellRendererComponent(
+            JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+
+        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+        if (value instanceof Major) {
+            Major yourObject = (Major) value;
+            setText(yourObject.getName());
+        }
+
+        return this;
+    }
 }

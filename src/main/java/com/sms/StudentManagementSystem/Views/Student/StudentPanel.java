@@ -5,12 +5,12 @@
 package com.sms.StudentManagementSystem.Views.Student;
 
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
 import com.sms.StudentManagementSystem.Controllers.StudentController;
-import com.sms.StudentManagementSystem.Controllers.UserController;
+import com.sms.StudentManagementSystem.Models.Department;
+import com.sms.StudentManagementSystem.Models.Major;
 import com.sms.StudentManagementSystem.Models.Student;
 import com.sms.StudentManagementSystem.Models.User;
 import com.sms.StudentManagementSystem.Views.MainForm;
@@ -27,8 +27,16 @@ import java.awt.*;
  */
 @Component
 public class StudentPanel extends JPanel {
+
+    @Setter
+    private User user;
+
     public StudentPanel() {
-        initComponents();
+        if (GraphicsEnvironment.isHeadless()) System.out.println("Headless mode");
+        else initComponents();
+
+        tblStudent.getColumnModel().getColumn(7).setCellRenderer(new DepartmentObjectTableRenderer());
+        tblStudent.getColumnModel().getColumn(8).setCellRenderer(new MajorObjectTableRenderer());
     }
 
     public Iterable<Student> students;
@@ -60,8 +68,8 @@ public class StudentPanel extends JPanel {
 
     private void btnSearchMouseClicked(MouseEvent e) {
         // TODO add your code here
-//        if (txtSearch.getText().equals("Search by Name")) loadTable();
-//        else loadTable(txtSearch.getText());
+        if (txtSearch.getText().equals("Search by Name")) loadTable();
+        else loadTable(txtSearch.getText());
     }
 
     private void btnSearchEnterKeyPressed(KeyEvent e) {
@@ -75,7 +83,7 @@ public class StudentPanel extends JPanel {
         DefaultTableModel model = (DefaultTableModel) tblStudent.getModel();
         model.setRowCount(0);
         for (Student student : students)
-            model.addRow(new Object[]{student.getName(), student.getDob(), student.getGender(), student.getEduType(), student.getCourseYear(), student.getClassName()});
+            model.addRow(new Object[]{student.getId(), student.getName(), student.getDob(), student.getGender(), student.getEduType(), student.getCourseYear(), student.getClassName(), student.getDepartment(), student.getMajor()});
     }
 
     public void loadTable(String text) {
@@ -83,7 +91,7 @@ public class StudentPanel extends JPanel {
         DefaultTableModel model = (DefaultTableModel) tblStudent.getModel();
         model.setRowCount(0);
         for (Student student : students)
-            model.addRow(new Object[]{student.getName(), student.getDob(), student.getGender(), student.getEduType(), student.getCourseYear(), student.getClassName()});
+            model.addRow(new Object[]{student.getId(), student.getName(), student.getDob(), student.getGender(), student.getEduType(), student.getCourseYear(), student.getClassName(), student.getDepartment(), student.getMajor()});
     }
 
     private void btnImportMouseClicked(MouseEvent e) {
@@ -137,20 +145,30 @@ public class StudentPanel extends JPanel {
     }
 
     private void btnCreateMouseClicked(MouseEvent e) {
-        // TODO add your code here
-        AddStudentForm addStudentForm = new AddStudentForm();
-        addStudentForm.setEditable(true);
-        addStudentForm.setVisible(true);
-        addStudentForm.setEnabled(true);
+        if(user.getRole().equals("Employee")) {
+            JOptionPane.showMessageDialog(null, "You are not authorized to do this operation", "Unauthorized", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
+        if(mainForm != null)
+            mainForm.showAddForm();
     }
 
     private void btnCreateEnterKeyPressed(KeyEvent e) {
-        // TODO add your code here
         if (e.getKeyCode() == KeyEvent.VK_ENTER)
             btnCreateMouseClicked(null);
     }
 
+    private void tblStudentMouseDoubleClick(MouseEvent e) {
+        int row = tblStudent.getSelectedRow();
+        if (e.getClickCount() == 2 && row >= 0) {
+            String id = tblStudent.getValueAt(row, 0).toString();
+            Student student = studentController.getStudentById(id);
+            if (student != null){
+                mainForm.openStudentDetailForm(student);
+            }
+        }
+    }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
@@ -158,24 +176,22 @@ public class StudentPanel extends JPanel {
         labelHeader = new JLabel();
         txtSearch = new JTextField();
         btnSearch = new JButton();
-        scrollPane2 = new JScrollPane();
-        textPane1 = new JTextPane();
-        tblStudent = new JTable();
         btnExport = new JButton();
         btnImport = new JButton();
         btnCreate = new JButton();
+        scrollPane1 = new JScrollPane();
+        tblStudent = new JTable();
 
         //======== this ========
         setPreferredSize(new Dimension(1498, 756));
         setMinimumSize(new Dimension(894, 757));
         setBackground(SystemColor.control);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
-        . swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing
-        . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
-        Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
-        ) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
-        public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName (
-        ) )) throw new RuntimeException( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
+        ( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing. border
+        . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
+        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
+        propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
+        ; }} );
 
         //---- labelHeader ----
         labelHeader.setText("Student");
@@ -230,23 +246,6 @@ public class StudentPanel extends JPanel {
                 btnSearchEnterKeyPressed(e);
             }
         });
-
-        //======== scrollPane2 ========
-        {
-            scrollPane2.setViewportView(textPane1);
-        }
-
-        //---- tblStudent ----
-        tblStudent.setModel(new DefaultTableModel(
-            new Object[][] {
-                {"Name", "DoB", "Gender", "EduType", "CourseYear", "ClassName"},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-            },
-            new String[] {
-                null, null, null, null, null, null
-            }
-        ));
 
         //---- btnExport ----
         btnExport.setText("EXPORT");
@@ -306,6 +305,35 @@ public class StudentPanel extends JPanel {
             }
         });
 
+        //======== scrollPane1 ========
+        {
+
+            //---- tblStudent ----
+            tblStudent.setModel(new DefaultTableModel(
+                new Object[][] {
+                    {null, "", null, null, null, null, null, null, null},
+                },
+                new String[] {
+                    "Id", "Name", "DoB", "Gender", "EduType", "CourseYear", "ClassName", "Department", "Major"
+                }
+            ) {
+                boolean[] columnEditable = new boolean[] {
+                    false, false, false, false, false, false, false, false, false
+                };
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return columnEditable[columnIndex];
+                }
+            });
+            tblStudent.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    tblStudentMouseDoubleClick(e);
+                }
+            });
+            scrollPane1.setViewportView(tblStudent);
+        }
+
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
         layout.setHorizontalGroup(
@@ -315,25 +343,20 @@ public class StudentPanel extends JPanel {
                     .addGroup(layout.createParallelGroup()
                         .addComponent(labelHeader)
                         .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(tblStudent, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup()
+                                .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 1017, GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btnSearch, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
-                                    .addGap(121, 121, 121)))
-                            .addGroup(layout.createParallelGroup()
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(150, 150, 150)
-                                    .addComponent(scrollPane2, GroupLayout.PREFERRED_SIZE, 0, GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(73, 73, 73)
+                                    .addGap(194, 194, 194)
                                     .addComponent(btnExport, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btnImport, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btnCreate, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)))))
-                    .addContainerGap(54, Short.MAX_VALUE))
+                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup()
@@ -347,14 +370,9 @@ public class StudentPanel extends JPanel {
                         .addComponent(btnExport, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnImport, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnCreate, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup()
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(14, 14, 14)
-                            .addComponent(tblStudent, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(50, 50, 50)
-                            .addComponent(scrollPane2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                    .addContainerGap(225, Short.MAX_VALUE))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
@@ -364,11 +382,36 @@ public class StudentPanel extends JPanel {
     private JLabel labelHeader;
     private JTextField txtSearch;
     private JButton btnSearch;
-    private JScrollPane scrollPane2;
-    private JTextPane textPane1;
-    private JTable tblStudent;
     private JButton btnExport;
     private JButton btnImport;
     private JButton btnCreate;
+    private JScrollPane scrollPane1;
+    private JTable tblStudent;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
+}
+
+class DepartmentObjectTableRenderer extends DefaultTableCellRenderer {
+    @Override
+    public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        // Assuming the value is an instance of Department
+        if (value instanceof Department) {
+            Department department = (Department) value;
+            value = department.getName();  // Display the department name
+        }
+
+        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+    }
+}
+
+class MajorObjectTableRenderer extends DefaultTableCellRenderer {
+    @Override
+    public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        // Assuming the value is an instance of Department
+        if (value instanceof Major) {
+            Major major = (Major) value;
+            value = major.getName();  // Display the department name
+        }
+
+        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+    }
 }

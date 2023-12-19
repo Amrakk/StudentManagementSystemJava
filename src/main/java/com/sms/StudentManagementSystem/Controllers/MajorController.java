@@ -4,13 +4,14 @@ import com.sms.StudentManagementSystem.Models.Major;
 import com.sms.StudentManagementSystem.Repositories.MajorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import java.util.List;
 
 @Controller
 public class MajorController {
     @Autowired
     private MajorRepository majorRepository;
 
-    public Iterable<Major> getAll() {
+    public List<Major> getAll() {
         return majorRepository.findAll();
     }
 

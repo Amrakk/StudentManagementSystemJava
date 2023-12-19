@@ -1,7 +1,7 @@
 package com.sms.StudentManagementSystem.Controllers;
 
+import com.sms.StudentManagementSystem.Models.Certificate;
 import com.sms.StudentManagementSystem.Models.Student;
-import com.sms.StudentManagementSystem.Models.User;
 import com.sms.StudentManagementSystem.Repositories.StudentRepository;
 import com.sms.StudentManagementSystem.Views.Student.StudentPanel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +17,14 @@ public class StudentController {
 
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private CertificateController certificateController;
 
     @Autowired
     private StudentPanel studentPanel;
 
     public Iterable<Student> getByName(String text) {
-        return studentRepository.searchByName(text);
+        return studentRepository.findByNameContaining(text);
     }
 
     public Iterable<Student> getAll() {
@@ -37,20 +39,63 @@ public class StudentController {
         return studentRepository.findByGenderAndEduTypeAndMajorIdAndDepartmentId(gender, eduType, majorId, departmentId);
     }
 
-    public Student addS(Student student){
-        return studentRepository.save(student);
+    public boolean addS(Student student){
+        if (isInvalidStudent(student)) return false;
+        try {
+            studentRepository.save(student);
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
-    public void deleteS(String id){
-        studentRepository.deleteById(id);
+    public boolean deleteS(Student student){
+        try {
+            certificateController.deleteByStudentId(student.getId());
+            studentRepository.delete(student);
+            JOptionPane.showMessageDialog(null, "User deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     public long countS() {
         return studentRepository.count();
     }
 
-    public Student updateS(Student student) {
-        return studentRepository.save(student);
+    public boolean updateS(Student student) {
+        if (isInvalidStudent(student)) return false;
+        try {
+            studentRepository.save(student);
+            JOptionPane.showMessageDialog(null, "Student updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    private boolean isInvalidStudent(Student student) {
+        if (student == null) {
+            JOptionPane.showMessageDialog(null, "Student is null", "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+
+        if (student.getId().isEmpty() ||
+                student.getName().isEmpty() ||
+                student.getDob() == null ||
+                student.getGender().isEmpty() ||
+                student.getEduType().isEmpty() ||
+                student.getCourseYear() == null ||
+                student.getClassName().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+
+        return false;
     }
 
     public boolean importFile(String path) {
@@ -98,5 +143,9 @@ public class StudentController {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+    }
+
+    public void commit() {
+        studentRepository.flush();
     }
 }
