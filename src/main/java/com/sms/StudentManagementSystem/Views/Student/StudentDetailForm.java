@@ -4,26 +4,31 @@
 
 package com.sms.StudentManagementSystem.Views.Student;
 
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.*;
-
-import com.sms.StudentManagementSystem.Controllers.*;
+import com.sms.StudentManagementSystem.Controllers.CertificateController;
+import com.sms.StudentManagementSystem.Controllers.DepartmentController;
+import com.sms.StudentManagementSystem.Controllers.MajorController;
+import com.sms.StudentManagementSystem.Controllers.StudentController;
 import com.sms.StudentManagementSystem.Models.*;
+import com.sms.StudentManagementSystem.Views.MainForm;
+import com.toedter.calendar.JDateChooser;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
 
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import javax.swing.*;
-import javax.swing.border.*;
-
-import com.sms.StudentManagementSystem.Views.MainForm;
-import com.toedter.calendar.*;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @author hoang
@@ -32,7 +37,7 @@ import org.springframework.stereotype.Component;
 public class StudentDetailForm extends JFrame {
     @Setter
     private User user;
-    
+
     @Setter
     private Student student;
 
@@ -62,13 +67,13 @@ public class StudentDetailForm extends JFrame {
         this.student = student;
     }
 
-    public void loadStudentDetail(){
+    public void loadStudentDetail() {
         btnResetMouseClicked(null);
         loadTable();
         btnResetCerMouseClicked(null);
     }
 
-    public void loadCertDetail(){
+    public void loadCertDetail() {
         textIDCer.setText(certificate.getId());
         textTITLE.setText(certificate.getTitle());
         textDESCRIPTION.setText(certificate.getDescription());
@@ -79,11 +84,11 @@ public class StudentDetailForm extends JFrame {
     }
 
     private void btnDeleteStudentMouseClicked(MouseEvent e) {
-        if(user.getRole().equals("Employee")) {
+        if (user.getRole().equals("Employee")) {
             JOptionPane.showMessageDialog(null, "You are not authorized to do this operation", "Unauthorized", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this student?", "Warning", JOptionPane.YES_NO_OPTION);
         if (result != JOptionPane.YES_OPTION) return;
 
@@ -106,6 +111,9 @@ public class StudentDetailForm extends JFrame {
         cbDepartment.setRenderer(new DepartmentObjectRenderer());
         cbMajor.setRenderer(new MajorObjectRenderer());
 
+        cbDepartment.removeAllItems();
+        cbMajor.removeAllItems();
+
         departments.forEach(d -> {
             cbDepartment.addItem(d);
         });
@@ -113,14 +121,12 @@ public class StudentDetailForm extends JFrame {
             cbMajor.addItem(m);
         });
 
-
         textID.setText(student.getId());
         textNAME.setText(student.getName());
         dcDoB.setDate(student.getDob());
-        if (student.getGender().equals("Male")){
+        if (student.getGender().equals("Male")) {
             rdMale.setSelected(true);
-        }
-        else{
+        } else {
             rdFemale.setSelected(true);
         }
         textCYear.setText(student.getCourseYear());
@@ -129,8 +135,8 @@ public class StudentDetailForm extends JFrame {
 
         int departmentIndex = 0;
         for (int i = 0; i < cbDepartment.getItemCount(); i++) {
-            Department item =(Department) cbDepartment.getItemAt(i);
-            if(Objects.equals(item.getId(), student.getDepartment().getId())) {
+            Department item = (Department) cbDepartment.getItemAt(i);
+            if (Objects.equals(item.getId(), student.getDepartment().getId())) {
                 departmentIndex = i;
                 break;
             }
@@ -140,8 +146,8 @@ public class StudentDetailForm extends JFrame {
 
         int majorIndex = 0;
         for (int i = 0; i < cbMajor.getItemCount(); i++) {
-            Major item =(Major) cbMajor.getItemAt(i);
-            if(Objects.equals(item.getId(), student.getMajor().getId())) {
+            Major item = (Major) cbMajor.getItemAt(i);
+            if (Objects.equals(item.getId(), student.getMajor().getId())) {
                 majorIndex = i;
                 break;
             }
@@ -206,7 +212,6 @@ public class StudentDetailForm extends JFrame {
             return;
         }
 
-
         // Update student information
         student.setName(name);
         student.setDob(dob);
@@ -244,31 +249,30 @@ public class StudentDetailForm extends JFrame {
         Date expiredD = dcEXPIRED.getDate();
         String organization = textORGANIZATION.getText();
 
-        if(issueD == null ||
+        if (issueD == null ||
                 expiredD == null ||
                 id.isEmpty() ||
                 title.isEmpty() ||
-                desc.isEmpty())
-        {
+                desc.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please fill in all fields!", "Empty fields", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if(issueD.compareTo(expiredD) > 0){
+        if (issueD.compareTo(expiredD) > 0) {
             JOptionPane.showMessageDialog(null, "Issue date must be less than expired date!", "Invalid date", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if(certificate == null){
+        if (certificate == null) {
             certificate = new Certificate(id, title, desc, issueD, expiredD, organization, isValid, student);
-            if(certificateController.add(certificate)){
+            if (certificateController.add(certificate)) {
                 JOptionPane.showMessageDialog(null, "Certificate added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 loadTable();
-            } else JOptionPane.showMessageDialog(null, "Certificate added failed!" , "Failed", JOptionPane.INFORMATION_MESSAGE);
+            } else
+                JOptionPane.showMessageDialog(null, "Certificate added failed!", "Failed", JOptionPane.INFORMATION_MESSAGE);
 
             certificate = null;
-        }
-        else {
+        } else {
             certificate.setId(id);
             certificate.setTitle(title);
             certificate.setDescription(desc);
@@ -289,12 +293,12 @@ public class StudentDetailForm extends JFrame {
             btnSaveCerMouseClicked(null);
     }
 
-    public void loadTable(){
+    public void loadTable() {
         certificates = certificateController.getByStudentId(student.getId());
 
         DefaultTableModel model = (DefaultTableModel) tblCer.getModel();
         model.setRowCount(0);
-        for (Certificate certificate:certificates){
+        for (Certificate certificate : certificates) {
             model.addRow(new Object[]{certificate.getId(),
                     certificate.getTitle(),
                     certificate.getOrganization(),
@@ -309,7 +313,7 @@ public class StudentDetailForm extends JFrame {
 
     private void btnResetCerMouseClicked(MouseEvent e) {
         // TODO add your code here
-        if(certificate == null){
+        if (certificate == null) {
 //            add new cert
             textIDCer.setText("");
             textTITLE.setText("");
@@ -321,8 +325,7 @@ public class StudentDetailForm extends JFrame {
 
             btnSaveCer.setText("Add");
             textIDCer.setEnabled(true);
-        }
-        else {
+        } else {
 //            edit cert
             textIDCer.setText(certificate.getId());
             textTITLE.setText(certificate.getTitle());
@@ -426,7 +429,7 @@ public class StudentDetailForm extends JFrame {
     }
 
     private void btnDeleteCertificateMouseClicked(MouseEvent e) {
-        if(user.getRole().equals("Employee")) {
+        if (user.getRole().equals("Employee")) {
             JOptionPane.showMessageDialog(null, "You are not authorized to do this operation", "Unauthorized", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -434,7 +437,7 @@ public class StudentDetailForm extends JFrame {
         int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this certificate?", "Warning", JOptionPane.YES_NO_OPTION);
         if (result != JOptionPane.YES_OPTION) return;
 
-        if(certificate == null) {
+        if (certificate == null) {
             JOptionPane.showMessageDialog(null, "Please select a specific certificate!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -445,11 +448,9 @@ public class StudentDetailForm extends JFrame {
         loadTable();
     }
 
-
-
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Tri
+        // Generated using JFormDesigner Evaluation license - Duy Nguyen
         panelProfile = new JPanel();
         labelID = new JLabel();
         labelNAME = new JLabel();
@@ -507,6 +508,7 @@ public class StudentDetailForm extends JFrame {
         setTitle("Student Details");
         setMinimumSize(new Dimension(14, 37));
         setPreferredSize(new Dimension(14, 37));
+        setResizable(false);
         var contentPane = getContentPane();
 
         //======== panelProfile ========
@@ -516,13 +518,11 @@ public class StudentDetailForm extends JFrame {
             panelProfile.setForeground(new Color(0x333333));
             panelProfile.setFont(new Font("Segoe UI", Font.BOLD, 20));
             panelProfile.setOpaque(false);
-            panelProfile.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
-            . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder
-            . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .
-            awt .Font .BOLD ,12 ), java. awt. Color. red) ,panelProfile. getBorder( )) )
-            ; panelProfile. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-            ) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
-            ;
+            panelProfile.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+            0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+            . BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+            red) ,panelProfile. getBorder( )) ); panelProfile. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+            beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
 
             //---- labelID ----
             labelID.setText("ID");
@@ -667,7 +667,7 @@ public class StudentDetailForm extends JFrame {
                                                 .addGap(37, 37, 37)
                                                 .addGroup(panelProfileLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                                     .addComponent(cbMajor, GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
-                                                    .addComponent(cbDepartment)))
+                                                    .addComponent(cbDepartment, GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)))
                                             .addGroup(panelProfileLayout.createSequentialGroup()
                                                 .addGroup(panelProfileLayout.createParallelGroup()
                                                     .addComponent(labelEduType)
@@ -1113,11 +1113,11 @@ public class StudentDetailForm extends JFrame {
                         .addComponent(panelProfile, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addGroup(contentPaneLayout.createSequentialGroup()
                             .addComponent(panelDeleteSTUDENT, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
                             .addComponent(panelDeleteCERTIFICATE, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)))
                     .addGap(18, 18, 18)
                     .addComponent(panelCertificate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 6, Short.MAX_VALUE))
+                    .addGap(0, 37, Short.MAX_VALUE))
         );
         contentPaneLayout.setVerticalGroup(
             contentPaneLayout.createParallelGroup()
@@ -1127,18 +1127,19 @@ public class StudentDetailForm extends JFrame {
                     .addGroup(contentPaneLayout.createParallelGroup()
                         .addComponent(panelDeleteSTUDENT, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addComponent(panelDeleteCERTIFICATE, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addGap(0, 0, Short.MAX_VALUE))
-                .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(panelCertificate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addGap(0, 103, Short.MAX_VALUE))
+                .addGroup(contentPaneLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(panelCertificate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(18, Short.MAX_VALUE))
         );
-        pack();
+        setSize(1256, 687);
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Tri
+    // Generated using JFormDesigner Evaluation license - Duy Nguyen
     private JPanel panelProfile;
     private JLabel labelID;
     private JLabel labelNAME;

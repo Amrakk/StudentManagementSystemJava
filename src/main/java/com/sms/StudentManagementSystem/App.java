@@ -52,7 +52,13 @@ public class App {
 
                 if (userController.getUserByEmail("admin@gmail.com") == null) {
                     LocalDate dob = LocalDate.of(2003, 8, 12);
-                    User admin = new User("admin@gmail.com", "admin123", "Duy Nguyen", 20, Date.valueOf(dob), "0902529803", "Normal", "Admin", null);
+                    User admin = new User("admin@gmail.com", "admin123", "Admin", 20, Date.valueOf(dob), "0123123123", "Normal", "Admin", null);
+                    userController.add(admin);
+                }
+
+                if (userController.getUserByEmail("employee@gmail.com") == null) {
+                    LocalDate dob = LocalDate.of(2003, 8, 12);
+                    User admin = new User("employee@gmail.com", "employee123", "Employee", 20, Date.valueOf(dob), "0123123123", "Normal", "Employee", null);
                     userController.add(admin);
                 }
 
