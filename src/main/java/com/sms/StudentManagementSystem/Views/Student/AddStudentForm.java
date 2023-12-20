@@ -4,24 +4,26 @@
 
 package com.sms.StudentManagementSystem.Views.Student;
 
-import java.awt.event.*;
-
-import com.sms.StudentManagementSystem.Controllers.*;
+import com.sms.StudentManagementSystem.Controllers.DepartmentController;
+import com.sms.StudentManagementSystem.Controllers.MajorController;
+import com.sms.StudentManagementSystem.Controllers.StudentController;
 import com.sms.StudentManagementSystem.Models.Department;
 import com.sms.StudentManagementSystem.Models.Major;
 import com.sms.StudentManagementSystem.Models.Student;
 import com.sms.StudentManagementSystem.Views.MainForm;
-import com.toedter.calendar.*;
+import com.toedter.calendar.JDateChooser;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
-import javax.swing.*;
-import javax.swing.border.LineBorder;
 
 /**
  * @author hoang
@@ -69,6 +71,9 @@ public class AddStudentForm extends JFrame {
         cbDepartmentID.setRenderer(new DepartmentObjectRenderer());
         cbMajorID.setRenderer(new MajorObjectRenderer());
 
+        cbDepartmentID.removeAllItems();
+        cbMajorID.removeAllItems();
+
         departments.forEach(d -> {
             cbDepartmentID.addItem(d);
         });
@@ -78,8 +83,6 @@ public class AddStudentForm extends JFrame {
     }
 
     private void btnAddMouseClicked(MouseEvent e) {
-        // TODO add your code here
-
         String id = textStudentID.getText();
         String name = textName.getText();
         Date dob = dcDoB.getDate();
@@ -93,32 +96,13 @@ public class AddStudentForm extends JFrame {
         if (departmentID == null) departmentID = "";
         if (majorID == null) majorID = "";
 
-        if(student == null){
-            student = new Student(id, name, dob, gender, eduType, courseYear, className, (Department) departmentID, (Major) majorID);
+        Student student = new Student(id, name, dob, gender, eduType, courseYear, className, (Department) departmentID, (Major) majorID);
 
-            if(studentController.addS(student)){
-                System.out.println(student + "\n Add Student Success");
-                JOptionPane.showMessageDialog(null, "Student added successfully!" , "Success", JOptionPane.INFORMATION_MESSAGE);
-                mainForm.studentPanelLoadTable();
-                dispose();
-            }
-        }
-        else{
-            textStudentID.setText(student.getId());
-            textName.setText(student.getName());
-            dcDoB.setDate(student.getDob());
-            if (student.getGender().equals("Male")){
-                radioGender1.setSelected(true);
-            }
-            else{
-                radioGender2.setSelected(true);
-            }
-            textEduType.setText(student.getEduType());
-            textCYear.setText(student.getCourseYear());
-            textCName.setText(student.getClassName());
-            if(studentController.updateS(student)){
-                mainForm.studentPanelLoadTable();
-            }
+        if (studentController.addS(student)) {
+            System.out.println(student + "\n Add Student Success");
+            JOptionPane.showMessageDialog(null, "Student added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            mainForm.studentPanelLoadTable();
+            dispose();
         }
     }
 

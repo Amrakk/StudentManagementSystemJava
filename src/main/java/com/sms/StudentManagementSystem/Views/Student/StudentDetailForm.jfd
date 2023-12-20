@@ -1,18 +1,20 @@
-JFDML JFormDesigner: "8.2.0.0.331" Java: "17.0.8.1" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.0.0.331" Java: "17.0.9" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {par l {comp panelProfile:::p::p, seq {comp panelDeleteSTUDENT:::p:255:p, space :::x, comp panelDeleteCERTIFICATE:::p:255:p}}, space s:::p, comp panelCertificate:::p::p, space :0:6:x}}"
-			"$verticalGroup": "par l {seq l {comp panelProfile:::p::p, space :::p, par l {comp panelDeleteSTUDENT:::p::p, comp panelDeleteCERTIFICATE:::p::p}, space :0:0:x}, seq t {space :0:0:x, comp panelCertificate:::p::p}}"
+			"$horizontalGroup": "par l {seq l {par l {comp panelProfile:::p::p, seq {comp panelDeleteSTUDENT:::p:255:p, space ::137:x, comp panelDeleteCERTIFICATE:::p:255:p}}, space s:::p, comp panelCertificate:::p::p, space :0:37:x}}"
+			"$verticalGroup": "par l {seq l {comp panelProfile:::p::p, space :::p, par l {comp panelDeleteSTUDENT:::p::p, comp panelDeleteCERTIFICATE:::p::p}, space :0:103:x}, seq l {space :::p, comp panelCertificate:::p::p, space ::18:x}}"
 		} ) {
 			name: "this"
 			"title": "Student Details"
 			"minimumSize": new java.awt.Dimension( 14, 37 )
 			"preferredSize": new java.awt.Dimension( 14, 37 )
+			"$sizePolicy": 1
+			"resizable": false
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq {par l {comp labelID::l:p::p, comp labelNAME::l:p::p, comp labelDoB:::p::p, comp labelGender:::p::p, comp labelCYear:::p::p}, par l {seq {par l {par l:::p {seq {space :p:13:p, comp textNAME:::p:110:p}, seq l {space u:::p, comp textCYear:::::x}}, seq t {space :p:13:p, par l {seq {comp rdMale:::p::p, space u:::p, comp rdFemale:::p::p}, comp dcDoB:::p:110:p}}}, space :::x, par l {seq l {space :0:0:x, comp btnReset:::p::p, space s:::p, comp btnEdit:::p::p}, seq {par l:::p {seq l {par l {comp labelDepartment::l:p::p, comp labelMajor::l:p::p}, space :p:37:p, par l:::p {comp cbMajor::::104:x, comp cbDepartment:::::x}}, seq l {par l {comp labelEduType::l:p::p, comp labelClass::l:p::p}, space s:::p, par l {comp textEduType::::103:x, comp textClass::::103:x}}}, space :0:0:x}}, space :::p}, seq l {space :p:13:p, comp textID:::p:85:p, space :::x}}}}"
+				"$horizontalGroup": "par l {seq {par l {comp labelID::l:p::p, comp labelNAME::l:p::p, comp labelDoB:::p::p, comp labelGender:::p::p, comp labelCYear:::p::p}, par l {seq {par l {par l:::p {seq {space :p:13:p, comp textNAME:::p:110:p}, seq l {space u:::p, comp textCYear:::::x}}, seq t {space :p:13:p, par l {seq {comp rdMale:::p::p, space u:::p, comp rdFemale:::p::p}, comp dcDoB:::p:110:p}}}, space :::x, par l {seq l {space :0:0:x, comp btnReset:::p::p, space s:::p, comp btnEdit:::p::p}, seq {par l:::p {seq l {par l {comp labelDepartment::l:p::p, comp labelMajor::l:p::p}, space :p:37:p, par l:::p {comp cbMajor::::104:x, comp cbDepartment::::104:x}}, seq l {par l {comp labelEduType::l:p::p, comp labelClass::l:p::p}, space s:::p, par l {comp textEduType::::103:x, comp textClass::::103:x}}}, space :0:0:x}}, space :::p}, seq l {space :p:13:p, comp textID:::p:85:p, space :::x}}}}"
 				"$verticalGroup": "par l {seq l {space :p:17:p, par b {comp labelID::b:p::p, comp textID::b:p::p}, space :::p, par b {comp labelNAME::b:p::p, comp labelDepartment::b:p::p, comp textNAME::b:p::p, comp cbDepartment::b:p::p}, space :::p, par b {comp labelDoB::b:p::p, comp labelMajor::b:p::p, comp dcDoB::b:p:30:p, comp cbMajor::b:p::p}, space :::p, par b {comp labelGender::b:p::p, comp labelEduType::b:p::p, comp rdMale::b:p::p, comp rdFemale::b:p::p, comp textEduType::b:p::p}, space :::p, par b {comp labelCYear::b:p::p, comp labelClass::b:p::p, comp textCYear::b:p::p, comp textClass::b:p::p}, space :p:23:p, par b {comp btnEdit::b:p:39:p, comp btnReset::b:p:39:p}, space ::41:x}}"
 			} ) {
 				name: "panelProfile"
@@ -363,8 +365,8 @@ new FormModel {
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 26, 10 )
-			"size": new java.awt.Dimension( 1094, 580 )
+			"location": new java.awt.Point( 26, 6 )
+			"size": new java.awt.Dimension( 1005, 550 )
 		} )
 	}
 }

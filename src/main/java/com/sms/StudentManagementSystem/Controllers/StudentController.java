@@ -1,6 +1,5 @@
 package com.sms.StudentManagementSystem.Controllers;
 
-import com.sms.StudentManagementSystem.Models.Certificate;
 import com.sms.StudentManagementSystem.Models.Student;
 import com.sms.StudentManagementSystem.Repositories.StudentRepository;
 import com.sms.StudentManagementSystem.Views.Student.StudentPanel;
@@ -35,12 +34,17 @@ public class StudentController {
         return studentRepository.findById(studentId).orElse(null);
     }
 
-    public Iterable<Student> GetByCriteria(String gender, String eduType, String majorId, String departmentId){
+    public Iterable<Student> GetByCriteria(String gender, String eduType, String majorId, String departmentId) {
         return studentRepository.findByGenderAndEduTypeAndMajorIdAndDepartmentId(gender, eduType, majorId, departmentId);
     }
 
-    public boolean addS(Student student){
+    public boolean addS(Student student) {
         if (isInvalidStudent(student)) return false;
+        if (studentRepository.existsById(student.getId())) {
+            JOptionPane.showMessageDialog(null, "Student already exists", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
         try {
             studentRepository.save(student);
             return true;
@@ -50,7 +54,7 @@ public class StudentController {
         }
     }
 
-    public boolean deleteS(Student student){
+    public boolean deleteS(Student student) {
         try {
             certificateController.deleteByStudentId(student.getId());
             studentRepository.delete(student);
