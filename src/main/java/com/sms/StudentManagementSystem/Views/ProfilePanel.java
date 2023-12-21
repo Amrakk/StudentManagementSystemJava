@@ -44,6 +44,9 @@ public class ProfilePanel extends JPanel {
         if (!user.getRole().equals("Admin")) {
             panelAdmin.setVisible(false);
             panelAdmin.setEnabled(false);
+        } else {
+            panelAdmin.setVisible(true);
+            panelAdmin.setEnabled(true);
         }
 
         txtName.setText(user.getName());
